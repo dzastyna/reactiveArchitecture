@@ -1,4 +1,4 @@
-package ms.arqlib.library;
+package ms.arqlib.catalogue;
 
 import java.util.Date;
 

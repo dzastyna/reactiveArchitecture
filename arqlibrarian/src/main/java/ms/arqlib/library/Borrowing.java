@@ -1,5 +1,7 @@
 package ms.arqlib.library;
 
+import ms.arqlib.catalogue.Book;
+
 import java.util.Date;
 
 public class Borrowing {

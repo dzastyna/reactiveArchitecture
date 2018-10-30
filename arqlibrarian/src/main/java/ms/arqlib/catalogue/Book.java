@@ -1,4 +1,4 @@
-package ms.arqlib.library;
+package ms.arqlib.catalogue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,5 +61,21 @@ public class Book {
 
     public void add(SingleRating singleRating) {
         this.ratings.add(singleRating);
+    }
+
+    public void rate(int rating) {
+        ratings.add(new SingleRating(rating));
+    }
+
+    public double averageRating() {
+        if (this.ratings.size() == 0)
+        {
+            return -1.0;
+        }
+
+        return this.ratings.stream()
+                .mapToDouble(r -> r.getRating())
+                .average().getAsDouble();
+
     }
 }

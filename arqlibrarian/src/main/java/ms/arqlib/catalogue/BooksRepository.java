@@ -1,9 +1,9 @@
-package ms.arqlib.library;
+package ms.arqlib.catalogue;
 
 import java.util.Iterator;
 
-public interface BooksDao {
-    void insert(Book book);
+public interface BooksRepository {
+    void add(Book book);
 
     Iterator<Book> findAll();
 

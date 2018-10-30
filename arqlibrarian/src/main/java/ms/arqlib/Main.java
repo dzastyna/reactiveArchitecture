@@ -1,14 +1,17 @@
 package ms.arqlib;
 
+import ms.arqlib.catalogue.BooksRepository;
+import ms.arqlib.catalogue.BooksApplicationService;
+import ms.arqlib.catalogue.MemoryBooksRepository;
 import ms.arqlib.library.*;
 
 public class Main {
 
     public static void main(String[] args) {
         Application application = new Application(new ConsoleIn(), new ConsoleOut());
-        BooksDao booksDao = CreateBooksDao();
-        application.setup(new BooksManager(booksDao));
-        application.setup(new BorrowingManager(CreateMemoryUserDao(), booksDao, CreateMemoryBorrowingDao()));
+        BooksRepository booksRepository = CreateBooksDao();
+        application.setup(new BooksApplicationService(booksRepository));
+        application.setup(new BorrowingManager(CreateMemoryUserDao(), booksRepository, CreateMemoryBorrowingDao()));
         application.start();
     }
 
@@ -27,9 +30,9 @@ public class Main {
         return dao;
     }
 
-    private static MemoryBooksDao CreateBooksDao()
+    private static MemoryBooksRepository CreateBooksDao()
     {
-        MemoryBooksDao dao = new MemoryBooksDao();
+        MemoryBooksRepository dao = new MemoryBooksRepository();
         dao.init();
 
         return dao;

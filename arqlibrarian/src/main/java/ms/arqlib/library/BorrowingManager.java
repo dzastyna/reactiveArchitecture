@@ -1,19 +1,22 @@
 package ms.arqlib.library;
 
+import ms.arqlib.catalogue.Book;
+import ms.arqlib.catalogue.BooksRepository;
+
 public class BorrowingManager {
     private UserDao userDao;
-    private BooksDao booksDao;
+    private BooksRepository booksRepository;
     private BorrowingDao borrowingDao;
 
-    public BorrowingManager(UserDao userDao, BooksDao booksDao, BorrowingDao borrowingDao) {
+    public BorrowingManager(UserDao userDao, BooksRepository booksRepository, BorrowingDao borrowingDao) {
         this.userDao = userDao;
-        this.booksDao = booksDao;
+        this.booksRepository = booksRepository;
         this.borrowingDao = borrowingDao;
     }
 
     public void borrow(long userId, long bookId) {
         User user = userDao.findById(userId);
-        Book book = booksDao.findById(bookId);
+        Book book = booksRepository.findById(bookId);
 
         borrowingDao.insert(new Borrowing(user, book));
     }

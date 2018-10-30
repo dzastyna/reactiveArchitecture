@@ -3,6 +3,9 @@ package ms.arqlib.library;
 import ms.arqlib.Application;
 import ms.arqlib.SpyUserIn;
 import ms.arqlib.SpyUserOut;
+import ms.arqlib.catalogue.BooksRepository;
+import ms.arqlib.catalogue.BooksApplicationService;
+import ms.arqlib.catalogue.MemoryBooksRepository;
 
 public class LibraryFixture {
 
@@ -16,7 +19,7 @@ public class LibraryFixture {
     private SpyUserIn userIn;
     private SpyUserOut userOut;
 
-    private BooksManager booksManager;
+    private BooksApplicationService booksApplicationService;
     private BorrowingManager borrowingManager;
     private UserDao userDao;
 
@@ -26,23 +29,23 @@ public class LibraryFixture {
 
         this.application = new Application(userIn, userOut);
 
-        BooksDao booksDao = createBooksDao();
-        this.booksManager = new BooksManager(booksDao);
-        this.application.setup(this.booksManager);
+        BooksRepository booksRepository = createBooksDao();
+        this.booksApplicationService = new BooksApplicationService(booksRepository);
+        this.application.setup(this.booksApplicationService);
 
         this.userDao = createUserDao();
-        this.borrowingManager = new BorrowingManager(this.userDao, booksDao, createBorrowingDao());
+        this.borrowingManager = new BorrowingManager(this.userDao, booksRepository, createBorrowingDao());
         this.application.setup(this.borrowingManager);
     }
 
     public void hasSampleBooks() {
-        this.booksManager.create("Karolcia", "Maria Kruger", "978-83-7568-638-8", "Siedmioróg", 2011, "Literatura dla dzieci i młodzieży");
-        this.booksManager.create("Komunikacja niewerbalna. Płeć i kultura", "Ewa Głażewska, Urszula Kusio", "978-83-7784-177-8", "Wydawnictwo Uniwersytetu Marii Curie-Skłodowskiej", 2012, "Nauki społeczne");
-        this.booksManager.create("O powstawaniu gatunków", "Karol Darwin", "978-83-62948-42-0", "Biblioteka Analiz", 2006, "Literatura popularnonaukowa");
-        this.booksManager.create("Pedagogika ogólna", "Bogusław Śliwerski", "978-83-7850-169-5", "Oficyna Wydawnicza IMPULS", 2013, "Nauki społeczne");
-        this.booksManager.create("Pinokio", "Carlo Collodi", "978-83-7895-249-7", "ZIELONA SOWA", 2009, "Podręczniki i lektury szkolne");
-        this.booksManager.create("Podstawy detektywistyki", "Tomasz Aleksandrowicz, Jerzy Konieczny, Anna Konik", "978-83-60807-30-9", "Łośgraf", 2008, "Prawo");
-        this.booksManager.create("Renesans", "Adam Karpiński", "978-83-01-15409-7", "Wydawnictwo Naukowe PWN", 2007, "Nauki humanistyczne");
+        this.booksApplicationService.addBook("Karolcia", "Maria Kruger", "978-83-7568-638-8", "Siedmioróg", 2011, "Literatura dla dzieci i młodzieży");
+        this.booksApplicationService.addBook("Komunikacja niewerbalna. Płeć i kultura", "Ewa Głażewska, Urszula Kusio", "978-83-7784-177-8", "Wydawnictwo Uniwersytetu Marii Curie-Skłodowskiej", 2012, "Nauki społeczne");
+        this.booksApplicationService.addBook("O powstawaniu gatunków", "Karol Darwin", "978-83-62948-42-0", "Biblioteka Analiz", 2006, "Literatura popularnonaukowa");
+        this.booksApplicationService.addBook("Pedagogika ogólna", "Bogusław Śliwerski", "978-83-7850-169-5", "Oficyna Wydawnicza IMPULS", 2013, "Nauki społeczne");
+        this.booksApplicationService.addBook("Pinokio", "Carlo Collodi", "978-83-7895-249-7", "ZIELONA SOWA", 2009, "Podręczniki i lektury szkolne");
+        this.booksApplicationService.addBook("Podstawy detektywistyki", "Tomasz Aleksandrowicz, Jerzy Konieczny, Anna Konik", "978-83-60807-30-9", "Łośgraf", 2008, "Prawo");
+        this.booksApplicationService.addBook("Renesans", "Adam Karpiński", "978-83-01-15409-7", "Wydawnictwo Naukowe PWN", 2007, "Nauki humanistyczne");
         this.startBooksCount = 7;
     }
 
@@ -63,7 +66,7 @@ public class LibraryFixture {
     }
 
     public void hasBook(String title, String author, String isbn, String publisher, int year, String category) {
-        this.booksManager.create(title, author, isbn, publisher, year, category);
+        this.booksApplicationService.addBook(title, author, isbn, publisher, year, category);
     }
 
     public void systemShowsAtLeastLines(int expectedCount) {
@@ -90,9 +93,9 @@ public class LibraryFixture {
         return dao;
     }
 
-    private BooksDao createBooksDao() {
+    private BooksRepository createBooksDao() {
         Generated.resetBookId();
-        MemoryBooksDao dao = new MemoryBooksDao();
+        MemoryBooksRepository dao = new MemoryBooksRepository();
         dao.clear();
 
         return dao;
@@ -111,10 +114,10 @@ public class LibraryFixture {
     }
 
     public long bookByTitle(String title) {
-        return this.booksManager.findByTitle(title).next().getId();
+        return this.booksApplicationService.findByTitle(title).next().getId();
     }
 
     public long bookIdByTitle(String title) {
-        return this.booksManager.findByTitle(title).next().getId();
+        return this.booksApplicationService.findByTitle(title).next().getId();
     }
 }
