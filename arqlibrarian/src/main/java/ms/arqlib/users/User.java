@@ -1,4 +1,4 @@
-package ms.arqlib.library;
+package ms.arqlib.users;
 
 public class User {
     private final String nickname;

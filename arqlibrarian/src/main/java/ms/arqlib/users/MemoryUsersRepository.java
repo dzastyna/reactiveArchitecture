@@ -1,13 +1,16 @@
-package ms.arqlib.library;
+package ms.arqlib.users;
+
+import ms.arqlib.library.Generated;
+import ms.arqlib.library.LibrarianException;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MemoryUserDao implements UserDao {
+public class MemoryUsersRepository implements UsersRepository {
     private static final List<User> users = new ArrayList<User>();
 
     @Override
-    public void insert(User user)
+    public void add(User user)
     {
         user.setId(Generated.userId());
         users.add(user);
@@ -30,8 +33,8 @@ public class MemoryUserDao implements UserDao {
     }
 
     public void init() {
-        insert(new User("kowalski", "kowal", "Jan Kowalski", "Gdynia", "87052507754"));
-        insert(new User("nowak", "nowypass", "Piotr Nowak", "Warszawa", "890224031121"));
-        insert(new User("koper", "dupadupa", "Wojciech Koperski", "Zakopane", "91121202176"));
+        add(new User("kowalski", "kowal", "Jan Kowalski", "Gdynia", "87052507754"));
+        add(new User("nowak", "nowypass", "Piotr Nowak", "Warszawa", "890224031121"));
+        add(new User("koper", "dupadupa", "Wojciech Koperski", "Zakopane", "91121202176"));
     }
 }

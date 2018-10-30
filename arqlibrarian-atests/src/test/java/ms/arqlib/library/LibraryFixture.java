@@ -6,6 +6,9 @@ import ms.arqlib.SpyUserOut;
 import ms.arqlib.catalogue.BooksRepository;
 import ms.arqlib.catalogue.BooksApplicationService;
 import ms.arqlib.catalogue.MemoryBooksRepository;
+import ms.arqlib.users.MemoryUsersRepository;
+import ms.arqlib.users.User;
+import ms.arqlib.users.UsersRepository;
 
 public class LibraryFixture {
 
@@ -21,7 +24,7 @@ public class LibraryFixture {
 
     private BooksApplicationService booksApplicationService;
     private BorrowingManager borrowingManager;
-    private UserDao userDao;
+    private UsersRepository usersRepository;
 
     public void applicationStarted() {
         this.userOut = new SpyUserOut();
@@ -33,8 +36,8 @@ public class LibraryFixture {
         this.booksApplicationService = new BooksApplicationService(booksRepository);
         this.application.setup(this.booksApplicationService);
 
-        this.userDao = createUserDao();
-        this.borrowingManager = new BorrowingManager(this.userDao, booksRepository, createBorrowingDao());
+        this.usersRepository = createUserDao();
+        this.borrowingManager = new BorrowingManager(this.usersRepository, booksRepository, createBorrowingDao());
         this.application.setup(this.borrowingManager);
     }
 
@@ -50,9 +53,9 @@ public class LibraryFixture {
     }
 
     public void hasSampleUsers() {
-        this.userDao.insert(new User("kowalski", "kowal", "Jan Kowalski", "Gdynia", "87052507754"));
-        this.userDao.insert(new User("nowak", "nowypass", "Piotr Nowak", "Warszawa", "890224031121"));
-        this.userDao.insert(new User("koper", "dupadupa", "Wojciech Koperski", "Zakopane", "91121202176"));
+        this.usersRepository.add(new User("kowalski", "kowal", "Jan Kowalski", "Gdynia", "87052507754"));
+        this.usersRepository.add(new User("nowak", "nowypass", "Piotr Nowak", "Warszawa", "890224031121"));
+        this.usersRepository.add(new User("koper", "dupadupa", "Wojciech Koperski", "Zakopane", "91121202176"));
     }
 
 
@@ -85,9 +88,9 @@ public class LibraryFixture {
         return dao;
     }
 
-    private UserDao createUserDao() {
+    private UsersRepository createUserDao() {
         Generated.resetUserId();
-        MemoryUserDao dao = new MemoryUserDao();
+        MemoryUsersRepository dao = new MemoryUsersRepository();
         dao.clear();
 
         return dao;

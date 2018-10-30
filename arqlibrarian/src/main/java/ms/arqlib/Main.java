@@ -4,6 +4,7 @@ import ms.arqlib.catalogue.BooksRepository;
 import ms.arqlib.catalogue.BooksApplicationService;
 import ms.arqlib.catalogue.MemoryBooksRepository;
 import ms.arqlib.library.*;
+import ms.arqlib.users.MemoryUsersRepository;
 
 public class Main {
 
@@ -23,9 +24,9 @@ public class Main {
         return dao;
     }
 
-    private static MemoryUserDao CreateMemoryUserDao()
+    private static MemoryUsersRepository CreateMemoryUserDao()
     {
-        MemoryUserDao dao = new MemoryUserDao();
+        MemoryUsersRepository dao = new MemoryUsersRepository();
         dao.init();
         return dao;
     }

@@ -1,6 +1,7 @@
 package ms.arqlib.library;
 
 import ms.arqlib.catalogue.Book;
+import ms.arqlib.users.User;
 
 import java.util.Date;
 
