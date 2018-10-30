@@ -55,14 +55,6 @@ public class Book {
         this.id = id;
     }
 
-    public List<SingleRating> getRatings() {
-        return ratings;
-    }
-
-    public void add(SingleRating singleRating) {
-        this.ratings.add(singleRating);
-    }
-
     public void rate(int rating) {
         ratings.add(new SingleRating(rating));
     }
