@@ -26,7 +26,7 @@ public class MemoryBooksRepository implements BooksRepository {
     @Override
     public Iterator<Book> findByTitle(String title) {
         return books.stream()
-                .filter(b -> b.getTitle().toLowerCase().equals(title.toLowerCase()))
+                .filter(b -> b.getTitle().toLowerCase().contains(title.toLowerCase()))
                 .collect(Collectors.toList()).iterator();
     }
 

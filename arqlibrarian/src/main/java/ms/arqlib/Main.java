@@ -10,10 +10,14 @@ public class Main {
 
     public static void main(String[] args) {
         Application application = new Application(new ConsoleIn(), new ConsoleOut());
-        application.setup(createBooksApplicationService());
+        BooksApplicationService booksApplicationService = createBooksApplicationService();
+        application.setup(booksApplicationService);
+
+        UsersApplicationService usersService = createUsersService();
+        application.setup(usersService);
 
         application.setup(new IssuesApplicationService(
-                createUsersService(), createBooksApplicationService(), createMemoryIssuesRepository()));
+                usersService, booksApplicationService, createMemoryIssuesRepository()));
 
         application.start();
     }
