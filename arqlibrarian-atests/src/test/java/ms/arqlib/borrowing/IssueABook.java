@@ -4,7 +4,7 @@ import ms.arqlib.library.LibraryFixture;
 import org.junit.Before;
 import org.junit.Test;
 
-public class BorrowABook {
+public class IssueABook {
 
     private LibraryFixture fixture = null;
 
@@ -15,7 +15,7 @@ public class BorrowABook {
     }
 
     @Test
-    public void shouldBorrowABook()
+    public void shouldIssueABook()
     {
         fixture.applicationStarted();
         fixture.hasSampleBooks();
@@ -25,11 +25,11 @@ public class BorrowABook {
         long id = fixture.bookIdByTitle("Ogniem i mieczem");
 
         //when
-        fixture.userEnters(String.format("borrow %d", id));
+        fixture.userEnters(String.format("issue %d", id));
         fixture.userEnters(String.format("status %d", id));
 
         fixture.then();
-        fixture.systemShows("[borrowed]*Ogniem i mieczem");
+        fixture.systemShows("[issued]*Ogniem i mieczem");
     }
 
 }

@@ -70,4 +70,8 @@ public class Book {
                 .average().getAsDouble();
 
     }
+
+    public String descrption() {
+        return S.$("%s %s", this.title, this.author);
+    }
 }

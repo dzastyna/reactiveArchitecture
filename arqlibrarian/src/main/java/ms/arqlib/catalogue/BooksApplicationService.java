@@ -36,4 +36,10 @@ public class BooksApplicationService {
         book.rate(rating);
         repository.save(book);
     }
+
+    public String findDescription(long bookId) {
+        Book book = this.repository.findById(bookId);
+
+        return book.descrption();
+    }
 }

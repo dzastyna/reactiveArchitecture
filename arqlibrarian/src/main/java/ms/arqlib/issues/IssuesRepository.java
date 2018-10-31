@@ -1,7 +1,7 @@
-package ms.arqlib.library;
+package ms.arqlib.issues;
 
-public interface BorrowingDao {
-    void insert(Borrowing borrowing);
+public interface IssuesRepository {
+    void add(Issue issue);
 
-    Borrowing findByBookId(long bookId);
+    Issue findByBookId(long bookId);
 }

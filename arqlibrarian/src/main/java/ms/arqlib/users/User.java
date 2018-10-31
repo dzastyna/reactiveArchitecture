@@ -9,7 +9,6 @@ public class User {
     private long id;
 
     public User(String nickname, String password, String fullname, String address, String pesel) {
-
         this.nickname = nickname;
         this.password = password;
         this.fullname = fullname;
@@ -43,5 +42,9 @@ public class User {
 
     public String getPesel() {
         return pesel;
+    }
+
+    public String description() {
+        return S.$("%s %s", this.nickname, this.fullname);
     }
 }

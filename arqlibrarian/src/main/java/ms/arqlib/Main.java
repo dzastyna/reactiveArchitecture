@@ -1,41 +1,43 @@
 package ms.arqlib;
 
-import ms.arqlib.catalogue.BooksRepository;
 import ms.arqlib.catalogue.BooksApplicationService;
 import ms.arqlib.catalogue.MemoryBooksRepository;
-import ms.arqlib.library.*;
+import ms.arqlib.issues.*;
 import ms.arqlib.users.MemoryUsersRepository;
+import ms.arqlib.users.UsersApplicationService;
 
 public class Main {
 
     public static void main(String[] args) {
         Application application = new Application(new ConsoleIn(), new ConsoleOut());
-        BooksRepository booksRepository = CreateBooksDao();
-        application.setup(new BooksApplicationService(booksRepository));
-        application.setup(new BorrowingManager(CreateMemoryUserDao(), booksRepository, CreateMemoryBorrowingDao()));
+        application.setup(createBooksApplicationService());
+
+        application.setup(new IssuesApplicationService(
+                createUsersService(), createBooksApplicationService(), createMemoryIssuesRepository()));
+
         application.start();
     }
 
-    private static MemoryBorrowingDao CreateMemoryBorrowingDao()
-    {
-        MemoryBorrowingDao dao = new MemoryBorrowingDao();
-        dao.init();
+    private static BooksApplicationService createBooksApplicationService() {
+        MemoryBooksRepository booksRepository = new MemoryBooksRepository();
+        booksRepository.init();
 
-        return dao;
+        return new BooksApplicationService(booksRepository);
     }
 
-    private static MemoryUsersRepository CreateMemoryUserDao()
+    private static IssuesRepository createMemoryIssuesRepository()
     {
-        MemoryUsersRepository dao = new MemoryUsersRepository();
-        dao.init();
-        return dao;
+        MemoryIssuesRepository repo = new MemoryIssuesRepository();
+        repo.init();
+
+        return repo;
     }
 
-    private static MemoryBooksRepository CreateBooksDao()
+    private static UsersApplicationService createUsersService()
     {
-        MemoryBooksRepository dao = new MemoryBooksRepository();
-        dao.init();
+        MemoryUsersRepository repo = new MemoryUsersRepository();
+        repo.init();
 
-        return dao;
+        return new UsersApplicationService(repo);
     }
 }

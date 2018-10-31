@@ -2,7 +2,8 @@ package ms.arqlib;
 
 import ms.arqlib.catalogue.Book;
 import ms.arqlib.catalogue.BooksApplicationService;
-import ms.arqlib.library.BorrowingManager;
+import ms.arqlib.issues.IssuesApplicationService;
+import ms.arqlib.users.UsersApplicationService;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -12,8 +13,9 @@ public class Application {
 
     private UserIn input;
     private UserOut output;
-    private BooksApplicationService booksApplicationService;
-    private BorrowingManager borrowingManager;
+    private BooksApplicationService booksService;
+    private IssuesApplicationService issuesService;
+    private UsersApplicationService usersService;
 
     //for now application works for the only sample user with id = 1
     //it will be more dynamic when login process will be supported
@@ -26,11 +28,15 @@ public class Application {
     }
 
     public void setup(BooksApplicationService booksApplicationService) {
-        this.booksApplicationService = booksApplicationService;
+        this.booksService = booksApplicationService;
     }
 
-    public void setup(BorrowingManager borrowingManager) {
-        this.borrowingManager = borrowingManager;
+    public void setup(IssuesApplicationService issuesApplicationService) {
+        this.issuesService = issuesApplicationService;
+    }
+
+    public void setup(UsersApplicationService usersApplicationService) {
+        this.usersService = usersApplicationService;
     }
 
     public void start() {
@@ -58,8 +64,8 @@ public class Application {
                 case "add":
                     this.addBook();
                     break;
-                case "borrow":
-                    this.borrowBook(args);
+                case "issue":
+                    this.issueBook(args);
                     break;
                 case "status":
                     this.showStatus(args);
@@ -74,22 +80,22 @@ public class Application {
     private void showStatus(String[] args) {
         long bookId = Long.parseLong(args[1]);
 
-        boolean borrowed = borrowingManager.borrowed(bookId);
-        Book book = booksApplicationService.findById(bookId);
+        boolean issued = issuesService.issued(bookId);
+        Book book = booksService.findById(bookId);
 
-        output.printLine(String.format("%s %s", borrowedToString(borrowed), basicInfoFor(book)));
+        output.printLine(String.format("%s %s", issuedToString(issued), basicInfoFor(book)));
     }
 
-    private String borrowedToString(boolean borrowed) {
-        return borrowed ? "[borrowed]" : "[available]";
+    private String issuedToString(boolean issued) {
+        return issued ? "[issued]" : "[available]";
     }
 
-    private void borrowBook(String[] args) {
+    private void issueBook(String[] args) {
         long bookId = Long.parseLong(args[1]);
-        borrowingManager.borrow(userId, bookId);
-        Book book = booksApplicationService.findById(bookId);
+        issuesService.issue(userId, bookId);
+        Book book = booksService.findById(bookId);
 
-        output.printLine(String.format("Borrowed: %s", basicInfoFor(book)));
+        output.printLine(String.format("Issued: %s", basicInfoFor(book)));
     }
 
     private void addBook() {
@@ -113,7 +119,7 @@ public class Application {
         output.print("Category: ");
         String category = input.readLine();
 
-        booksApplicationService.addBook(title, author, isbn, publisher, year, category);
+        booksService.addBook(title, author, isbn, publisher, year, category);
     }
 
     private void rateBook(String[] args) {
@@ -124,9 +130,9 @@ public class Application {
         long bookId = Long.parseLong(args[1]);
         int rating = Integer.parseInt(args[2]);
 
-        booksApplicationService.rate(bookId, rating);
-        Book book = booksApplicationService.findById(bookId);
-        double totalRating = booksApplicationService.computeRatingFor(bookId);
+        booksService.rate(bookId, rating);
+        Book book = booksService.findById(bookId);
+        double totalRating = booksService.computeRatingFor(bookId);
 
         output.printLine(String.format("%s rated: %d, total rating: %1.1f", book.getTitle(), rating, totalRating));
     }
@@ -135,13 +141,13 @@ public class Application {
         Iterator<Book> books = null;
         if (hasParameters(commandString))
         {
-            books = booksApplicationService.findAll();
+            books = booksService.findAll();
         }
         else
         {
             String toSearch = substringAfterFirstSpace(commandString);
 
-            books = booksApplicationService.findByTitle(toSearch);
+            books = booksService.findByTitle(toSearch);
             output.printLine(books.hasNext()
                     ? String.format("Found: '%s'", toSearch)
                     : String.format("'%s' title not Found", toSearch));
@@ -156,7 +162,7 @@ public class Application {
 
         for(Book book : books)
         {
-            double rating = booksApplicationService.computeRatingFor(book.getId());
+            double rating = booksService.computeRatingFor(book.getId());
             output.printLine(String.format("%s: %s, rating: %s", book.getId(), basicInfoFor(book), formatted(rating)));
         }
     }

@@ -35,7 +35,7 @@ public class MemoryBooksRepository implements BooksRepository {
         Book book = books.stream().filter(b -> b.getId() == id).findFirst().get();
 
         if (book == null) {
-            throw new LibrarianException(String.format("Book not found with id = %d", id));
+            throw new CatalogueException(String.format("Book not found with id = %d", id));
         }
 
         return book;

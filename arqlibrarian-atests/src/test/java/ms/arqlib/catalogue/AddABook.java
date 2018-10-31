@@ -1,5 +1,6 @@
-package ms.arqlib.library;
+package ms.arqlib.catalogue;
 
+import ms.arqlib.library.LibraryFixture;
 import org.junit.Before;
 import org.junit.Test;
 

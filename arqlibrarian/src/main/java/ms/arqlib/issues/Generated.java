@@ -1,4 +1,4 @@
-package ms.arqlib.library;
+package ms.arqlib.issues;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -6,35 +6,14 @@ import java.util.Map;
 public class Generated {
 
     private static final Map<String, Long> ids = new HashMap<>();
-
-    public static long bookId()
+    public static long issueId()
     {
-        return idFor("book");
+        return idFor("issue");
     }
 
-    public static long borrowingId()
+    public static void resetIssueId()
     {
-        return idFor("borrowing");
-    }
-
-    public static long userId()
-    {
-        return idFor("user");
-    }
-
-    public static void resetUserId()
-    {
-        resetIdFor("user");
-    }
-
-    public static void resetBorrowingId()
-    {
-        resetIdFor("borrowing");
-    }
-
-    public static void resetBookId()
-    {
-        resetIdFor("book");
+        resetIdFor("issue");
     }
 
     private static long idFor(String name)

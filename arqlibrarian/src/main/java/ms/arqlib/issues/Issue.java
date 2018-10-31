@@ -1,20 +1,25 @@
-package ms.arqlib.library;
+package ms.arqlib.issues;
 
-import ms.arqlib.catalogue.Book;
-import ms.arqlib.users.User;
-
+import java.time.LocalDate;
 import java.util.Date;
+import java.util.Optional;
 
-public class Borrowing {
+public class Issue {
     private long id;
-    private final User user;
-    private final Book book;
-    private final Date when;
+    private final long userId;
+    private final long bookId;
+    private final Date issuedOn;
+    private String userDescription;
+    private String bookDescription;
+    private Optional<LocalDate> returnedOn = Optional.empty();
 
-    public Borrowing(User user, Book book) {
-        this.user = user;
-        this.book = book;
-        this.when = new Date();
+    public Issue(long userId, long bookId, String userDescription, String bookDescription) {
+
+        this.userId = userId;
+        this.bookId = bookId;
+        this.userDescription = userDescription;
+        this.bookDescription = bookDescription;
+        this.issuedOn = new Date();
     }
 
     public long getId() {
@@ -26,6 +31,10 @@ public class Borrowing {
     }
 
     public long getBookId() {
-        return book.getId();
+        return this.bookId;
+    }
+
+    public boolean returned() {
+        return returnedOn.isPresent();
     }
 }

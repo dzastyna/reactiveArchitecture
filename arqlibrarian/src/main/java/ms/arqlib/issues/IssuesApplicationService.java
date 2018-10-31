@@ -1,29 +1,34 @@
-package ms.arqlib.library;
+package ms.arqlib.issues;
 
-import ms.arqlib.catalogue.Book;
-import ms.arqlib.catalogue.BooksRepository;
-import ms.arqlib.users.User;
-import ms.arqlib.users.UsersRepository;
 
-public class BorrowingManager {
-    private UsersRepository usersRepository;
-    private BooksRepository booksRepository;
-    private BorrowingDao borrowingDao;
+import ms.arqlib.catalogue.BooksApplicationService;
+import ms.arqlib.users.UsersApplicationService;
+import static ms.arqlib.users.S.$;
 
-    public BorrowingManager(UsersRepository usersRepository, BooksRepository booksRepository, BorrowingDao borrowingDao) {
-        this.usersRepository = usersRepository;
-        this.booksRepository = booksRepository;
-        this.borrowingDao = borrowingDao;
+public class IssuesApplicationService {
+    private UsersApplicationService usersService;
+    private BooksApplicationService booksService;
+    private IssuesRepository issuesRepository;
+
+    public IssuesApplicationService(UsersApplicationService usersService, BooksApplicationService booksApplicationService, IssuesRepository borrowingRepository) {
+        this.usersService = usersService;
+        this.booksService = booksApplicationService;
+        this.issuesRepository = borrowingRepository;
     }
 
-    public void borrow(long userId, long bookId) {
-        User user = usersRepository.findById(userId);
-        Book book = booksRepository.findById(bookId);
+    public void issue(long userId, long bookId) {
+        if (issued(bookId)) {
+            throw new IssueException($("Book with id = %d is already issued", bookId));
+        }
 
-        borrowingDao.insert(new Borrowing(user, book));
+        String userDescription = usersService.findDescription(userId);
+        String bookDescription = booksService.findDescription(bookId);
+
+        issuesRepository.add(new Issue(userId, bookId, userDescription, bookDescription));
     }
 
-    public boolean borrowed(long bookId) {
-        return borrowingDao.findByBookId(bookId) != null;
+    public boolean issued(long bookId) {
+        // TODO and was not returned
+        return issuesRepository.findByBookId(bookId) != null;
     }
 }

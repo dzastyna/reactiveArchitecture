@@ -19,7 +19,7 @@ public class MemoryUsersRepository implements UsersRepository {
 
         if (user == null)
         {
-            throw new LibrarianException(String.format("User not found with id = %d", userId));
+            throw new UserException(S.$("User not found with id = %d", userId));
         }
 
         return user;

@@ -6,8 +6,12 @@ import ms.arqlib.SpyUserOut;
 import ms.arqlib.catalogue.BooksRepository;
 import ms.arqlib.catalogue.BooksApplicationService;
 import ms.arqlib.catalogue.MemoryBooksRepository;
+import ms.arqlib.issues.IssuesApplicationService;
+import ms.arqlib.issues.IssuesRepository;
+import ms.arqlib.issues.MemoryIssuesRepository;
 import ms.arqlib.users.MemoryUsersRepository;
 import ms.arqlib.users.User;
+import ms.arqlib.users.UsersApplicationService;
 import ms.arqlib.users.UsersRepository;
 
 public class LibraryFixture {
@@ -23,8 +27,8 @@ public class LibraryFixture {
     private SpyUserOut userOut;
 
     private BooksApplicationService booksApplicationService;
-    private BorrowingManager borrowingManager;
-    private UsersRepository usersRepository;
+    private IssuesApplicationService issuesApplicationService;
+    private UsersApplicationService usersApplicationService;
 
     public void applicationStarted() {
         this.userOut = new SpyUserOut();
@@ -32,13 +36,18 @@ public class LibraryFixture {
 
         this.application = new Application(userIn, userOut);
 
-        BooksRepository booksRepository = createBooksDao();
+        BooksRepository booksRepository = createBooksRepository();
         this.booksApplicationService = new BooksApplicationService(booksRepository);
         this.application.setup(this.booksApplicationService);
 
-        this.usersRepository = createUserDao();
-        this.borrowingManager = new BorrowingManager(this.usersRepository, booksRepository, createBorrowingDao());
-        this.application.setup(this.borrowingManager);
+        UsersRepository usersRepository = createUserRepository();
+        this.usersApplicationService = new UsersApplicationService(usersRepository);
+        this.application.setup(this.usersApplicationService);
+
+        this.issuesApplicationService = new IssuesApplicationService(
+                this.usersApplicationService, this.booksApplicationService, createIssuesRepository());
+
+        this.application.setup(this.issuesApplicationService);
     }
 
     public void hasSampleBooks() {
@@ -53,9 +62,9 @@ public class LibraryFixture {
     }
 
     public void hasSampleUsers() {
-        this.usersRepository.add(new User("kowalski", "kowal", "Jan Kowalski", "Gdynia", "87052507754"));
-        this.usersRepository.add(new User("nowak", "nowypass", "Piotr Nowak", "Warszawa", "890224031121"));
-        this.usersRepository.add(new User("koper", "dupadupa", "Wojciech Koperski", "Zakopane", "91121202176"));
+        this.usersApplicationService.addUser("kowalski", "kowal", "Jan Kowalski", "Gdynia", "87052507754");
+        this.usersApplicationService.addUser("nowak", "nowypass", "Piotr Nowak", "Warszawa", "890224031121");
+        this.usersApplicationService.addUser("koper", "dupadupa", "Wojciech Koperski", "Zakopane", "91121202176");
     }
 
 
@@ -80,24 +89,24 @@ public class LibraryFixture {
         this.userIn.enterLine(text);
     }
 
-    private BorrowingDao createBorrowingDao() {
-        Generated.resetBorrowingId();
-        MemoryBorrowingDao dao = new MemoryBorrowingDao();
-        dao.clear();
+    private IssuesRepository createIssuesRepository() {
+        ms.arqlib.issues.Generated.resetIssueId();
+        MemoryIssuesRepository repo = new MemoryIssuesRepository();
+        repo.clear();
 
-        return dao;
+        return repo;
     }
 
-    private UsersRepository createUserDao() {
-        Generated.resetUserId();
+    private UsersRepository createUserRepository() {
+        ms.arqlib.users.Generated.resetUserId();
         MemoryUsersRepository dao = new MemoryUsersRepository();
         dao.clear();
 
         return dao;
     }
 
-    private BooksRepository createBooksDao() {
-        Generated.resetBookId();
+    private BooksRepository createBooksRepository() {
+        ms.arqlib.catalogue.Generated.resetBookId();
         MemoryBooksRepository dao = new MemoryBooksRepository();
         dao.clear();
 
