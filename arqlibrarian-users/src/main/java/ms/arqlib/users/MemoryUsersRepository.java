@@ -1,6 +1,7 @@
 package ms.arqlib.users;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class MemoryUsersRepository implements UsersRepository {
@@ -24,6 +25,12 @@ public class MemoryUsersRepository implements UsersRepository {
 
         return user;
     }
+
+    @Override
+    public List<User> findAll() {
+        return Collections.unmodifiableList(users);
+    }
+
 
     public void clear() {
         users.clear();
