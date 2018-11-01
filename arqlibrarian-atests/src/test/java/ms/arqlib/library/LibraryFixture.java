@@ -10,7 +10,6 @@ import ms.arqlib.issues.IssuesApplicationService;
 import ms.arqlib.issues.IssuesRepository;
 import ms.arqlib.issues.MemoryIssuesRepository;
 import ms.arqlib.users.MemoryUsersRepository;
-import ms.arqlib.users.User;
 import ms.arqlib.users.UsersApplicationService;
 import ms.arqlib.users.UsersRepository;
 

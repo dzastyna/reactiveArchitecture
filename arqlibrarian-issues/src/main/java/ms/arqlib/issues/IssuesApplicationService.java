@@ -18,7 +18,7 @@ public class IssuesApplicationService {
 
     public void issue(long userId, long bookId) {
         if (issued(bookId)) {
-            throw new IssueException($("Book with id = %d is already issued", bookId));
+            throw new IssueException(S.$("Book with id = %d is already issued", bookId));
         }
 
         String userDescription = usersService.findDescription(userId);
@@ -28,7 +28,7 @@ public class IssuesApplicationService {
     }
 
     public boolean issued(long bookId) {
-        // TODO and was not returned
-        return issuesRepository.findByBookId(bookId) != null;
+        Issue issue = issuesRepository.findByBookId(bookId);
+        return issue != null && issue.returned() == false;
     }
 }
