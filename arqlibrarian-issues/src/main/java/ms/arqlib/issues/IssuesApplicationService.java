@@ -1,18 +1,17 @@
 package ms.arqlib.issues;
 
 
-import ms.arqlib.catalogue.BooksApplicationService;
-import ms.arqlib.users.UsersApplicationService;
-import static ms.arqlib.users.S.$;
+import ms.arqlib.issues.ports.BooksService;
+import ms.arqlib.issues.ports.UsersService;
 
 public class IssuesApplicationService {
-    private UsersApplicationService usersService;
-    private BooksApplicationService booksService;
+    private UsersService usersService;
+    private BooksService booksService;
     private IssuesRepository issuesRepository;
 
-    public IssuesApplicationService(UsersApplicationService usersService, BooksApplicationService booksApplicationService, IssuesRepository borrowingRepository) {
+    public IssuesApplicationService(UsersService usersService, BooksService booksService, IssuesRepository borrowingRepository) {
         this.usersService = usersService;
-        this.booksService = booksApplicationService;
+        this.booksService = booksService;
         this.issuesRepository = borrowingRepository;
     }
 

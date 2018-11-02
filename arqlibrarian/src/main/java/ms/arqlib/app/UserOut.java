@@ -1,4 +1,4 @@
-package ms.arqlib;
+package ms.arqlib.app;
 
 public interface UserOut {
     void print(String text);

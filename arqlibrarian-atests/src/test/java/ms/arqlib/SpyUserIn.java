@@ -1,5 +1,7 @@
 package ms.arqlib;
 
+import ms.arqlib.app.UserIn;
+
 import java.util.LinkedList;
 import java.util.Queue;
 

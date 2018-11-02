@@ -1,11 +1,12 @@
-package ms.arqlib;
+package ms.arqlib.app;
 
-import ms.arqlib.catalogue.Book;
-import ms.arqlib.catalogue.BooksApplicationService;
-import ms.arqlib.issues.IssuesApplicationService;
-import ms.arqlib.users.UsersApplicationService;
+import ms.arqlib.app.ports.BooksService;
+import ms.arqlib.app.ports.IssuesService;
+import ms.arqlib.app.ports.UsersService;
+import ms.arqlib.app.ports.Book;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -13,9 +14,9 @@ public class Application {
 
     private UserIn input;
     private UserOut output;
-    private BooksApplicationService booksService;
-    private IssuesApplicationService issuesService;
-    private UsersApplicationService usersService;
+    private BooksService booksService;
+    private IssuesService issuesService;
+    private UsersService usersService;
 
     //for now application works for the only sample user with id = 1
     //it will be more dynamic when login process will be supported
@@ -27,16 +28,16 @@ public class Application {
         this.output = output;
     }
 
-    public void setup(BooksApplicationService booksApplicationService) {
-        this.booksService = booksApplicationService;
+    public void setup(BooksService booksService) {
+        this.booksService = booksService;
     }
 
-    public void setup(IssuesApplicationService issuesApplicationService) {
-        this.issuesService = issuesApplicationService;
+    public void setup(IssuesService issuesService) {
+        this.issuesService = issuesService;
     }
 
-    public void setup(UsersApplicationService usersApplicationService) {
-        this.usersService = usersApplicationService;
+    public void setup(UsersService usersApplicationService) {
+        this.usersService = usersService;
     }
 
     public void start() {
@@ -138,28 +139,22 @@ public class Application {
     }
 
     private void searchBook(String commandString) {
-        Iterator<Book> books = null;
-        if (hasParameters(commandString))
-        {
+        Collection<Book> books = null;
+        if (hasParameters(commandString)) {
             books = booksService.findAll();
-        }
-        else
-        {
+        } else {
             String toSearch = substringAfterFirstSpace(commandString);
 
             books = booksService.findByTitle(toSearch);
-            output.printLine(books.hasNext()
-                    ? String.format("Found: '%s'", toSearch)
-                    : String.format("'%s' title not Found", toSearch));
+            output.printLine(books.isEmpty()
+                    ? String.format("'%s' title not Found", toSearch)
+                    : String.format("Found: '%s'", toSearch));
         }
 
         this.print(books);
     }
 
-    private void print(Iterator<Book> iterator) {
-        List<Book> books = new ArrayList<>();
-        iterator.forEachRemaining(books::add);
-
+    private void print(Collection<Book> books) {
         for(Book book : books)
         {
             double rating = booksService.computeRatingFor(book.getId());

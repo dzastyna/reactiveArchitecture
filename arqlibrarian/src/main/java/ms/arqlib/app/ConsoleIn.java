@@ -1,4 +1,4 @@
-package ms.arqlib;
+package ms.arqlib.app;
 
 import java.util.Scanner;
 

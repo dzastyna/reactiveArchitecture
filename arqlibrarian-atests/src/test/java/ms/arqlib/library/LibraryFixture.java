@@ -1,14 +1,17 @@
 package ms.arqlib.library;
 
-import ms.arqlib.Application;
+import ms.arqlib.app.Application;
 import ms.arqlib.SpyUserIn;
 import ms.arqlib.SpyUserOut;
+import ms.arqlib.app.adapters.IssuesServiceAdapter;
 import ms.arqlib.catalogue.BooksRepository;
 import ms.arqlib.catalogue.BooksApplicationService;
 import ms.arqlib.catalogue.MemoryBooksRepository;
 import ms.arqlib.issues.IssuesApplicationService;
 import ms.arqlib.issues.IssuesRepository;
 import ms.arqlib.issues.MemoryIssuesRepository;
+import ms.arqlib.issues.adapters.BooksServiceAdapter;
+import ms.arqlib.issues.adapters.UsersServiceAdapter;
 import ms.arqlib.users.MemoryUsersRepository;
 import ms.arqlib.users.UsersApplicationService;
 import ms.arqlib.users.UsersRepository;
@@ -37,16 +40,18 @@ public class LibraryFixture {
 
         BooksRepository booksRepository = createBooksRepository();
         this.booksApplicationService = new BooksApplicationService(booksRepository);
-        this.application.setup(this.booksApplicationService);
+        this.application.setup(new ms.arqlib.app.adapters.BooksServiceAdapter(this.booksApplicationService));
 
         UsersRepository usersRepository = createUserRepository();
         this.usersApplicationService = new UsersApplicationService(usersRepository);
-        this.application.setup(this.usersApplicationService);
+        this.application.setup(new ms.arqlib.app.adapters.UsersServiceAdapter(this.usersApplicationService));
 
         this.issuesApplicationService = new IssuesApplicationService(
-                this.usersApplicationService, this.booksApplicationService, createIssuesRepository());
+                new UsersServiceAdapter(this.usersApplicationService),
+                new BooksServiceAdapter(this.booksApplicationService),
+                createIssuesRepository());
 
-        this.application.setup(this.issuesApplicationService);
+        this.application.setup(new IssuesServiceAdapter(this.issuesApplicationService));
     }
 
     public void hasSampleBooks() {

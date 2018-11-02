@@ -1,4 +1,4 @@
-package ms.arqlib;
+package ms.arqlib.app;
 
 public class ConsoleOut implements UserOut {
     @Override

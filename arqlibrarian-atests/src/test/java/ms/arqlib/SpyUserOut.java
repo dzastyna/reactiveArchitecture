@@ -1,5 +1,6 @@
 package ms.arqlib;
 
+import ms.arqlib.app.UserOut;
 import org.junit.Assert;
 
 import java.util.ArrayList;
