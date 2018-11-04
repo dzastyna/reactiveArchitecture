@@ -59,7 +59,7 @@ public class Book {
         ratings.add(new SingleRating(rating));
     }
 
-    public double averageRating() {
+    public double getRating() {
         if (this.ratings.size() == 0)
         {
             return -1.0;
@@ -71,7 +71,7 @@ public class Book {
 
     }
 
-    public String descrption() {
-        return S.$("%s %s", this.title, this.author);
+    public String description() {
+        return S.$("'%s' - %s", this.title, this.author);
     }
 }

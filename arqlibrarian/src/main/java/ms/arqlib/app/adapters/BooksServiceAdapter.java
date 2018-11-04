@@ -1,8 +1,11 @@
 package ms.arqlib.app.adapters;
 
+import ms.arqlib.app.ports.AddBookRequest;
 import ms.arqlib.app.ports.Book;
 import ms.arqlib.app.ports.BooksService;
+import ms.arqlib.app.ports.RateBookRequest;
 import ms.arqlib.catalogue.BooksApplicationService;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -23,7 +26,8 @@ public class BooksServiceAdapter implements BooksService {
                 book.getIsbn(),
                 book.getPublisher(),
                 book.getYear(),
-                book.getCategory());
+                book.getCategory(),
+                book.getRating());
     }
 
     List<ms.arqlib.app.ports.Book> adapt(Iterator<ms.arqlib.catalogue.Book> iterator) {
@@ -37,8 +41,9 @@ public class BooksServiceAdapter implements BooksService {
     }
 
     @Override
-    public void addBook(String title, String author, String isbn, String publisher, int year, String category) {
-        this.booksApplicationService.addBook(title, author, isbn, publisher, year, category);
+    public void addBook(AddBookRequest request) {
+        this.booksApplicationService.addBook(
+                request.title, request.author, request.isbn, request.publisher, request.year, request.category);
     }
 
     @Override
@@ -58,11 +63,11 @@ public class BooksServiceAdapter implements BooksService {
 
     @Override
     public double computeRatingFor(long id) {
-        return this.booksApplicationService.computeRatingFor(id);
+        return this.booksApplicationService.ratingFor(id);
     }
 
     @Override
-    public void rate(long bookId, int rating) {
-        this.booksApplicationService.rate(bookId, rating);
+    public void rate(RateBookRequest request) {
+        this.booksApplicationService.rate(request.bookId, request.rating);
     }
 }

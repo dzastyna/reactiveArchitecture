@@ -1,14 +1,8 @@
 package ms.arqlib.app;
 
-import ms.arqlib.app.ports.BooksService;
-import ms.arqlib.app.ports.IssuesService;
-import ms.arqlib.app.ports.UsersService;
-import ms.arqlib.app.ports.Book;
+import ms.arqlib.app.ports.*;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
 
 public class Application {
 
@@ -36,8 +30,8 @@ public class Application {
         this.issuesService = issuesService;
     }
 
-    public void setup(UsersService usersApplicationService) {
-        this.usersService = usersService;
+    public void setup(UsersService usersService) {
+        this.usersService = this.usersService;
     }
 
     public void start() {
@@ -92,8 +86,9 @@ public class Application {
     }
 
     private void issueBook(String[] args) {
-        long bookId = Long.parseLong(args[1]);
-        issuesService.issue(userId, bookId);
+        long issuerId = Long.parseLong(args[1]);
+        long bookId = Long.parseLong(args[2]);
+        issuesService.issue(new IssueBookRequest(issuerId, bookId));
         Book book = booksService.findById(bookId);
 
         output.printLine(String.format("Issued: %s", basicInfoFor(book)));
@@ -120,7 +115,7 @@ public class Application {
         output.print("Category: ");
         String category = input.readLine();
 
-        booksService.addBook(title, author, isbn, publisher, year, category);
+        booksService.addBook(new AddBookRequest(title, author, isbn, publisher, year, category));
     }
 
     private void rateBook(String[] args) {
@@ -131,7 +126,7 @@ public class Application {
         long bookId = Long.parseLong(args[1]);
         int rating = Integer.parseInt(args[2]);
 
-        booksService.rate(bookId, rating);
+        booksService.rate(new RateBookRequest(bookId, rating));
         Book book = booksService.findById(bookId);
         double totalRating = booksService.computeRatingFor(bookId);
 

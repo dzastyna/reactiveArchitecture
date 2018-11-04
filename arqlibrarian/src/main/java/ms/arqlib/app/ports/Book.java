@@ -1,10 +1,5 @@
 package ms.arqlib.app.ports;
 
-import ms.arqlib.catalogue.SingleRating;
-
-import java.util.ArrayList;
-import java.util.List;
-
 public class Book {
     private long id;
     private String title;
@@ -13,11 +8,11 @@ public class Book {
     private String publisher;
     private int year;
     private String category;
-    private final List<SingleRating> ratings = new ArrayList<>();
+    private double rating;
 
     public Book() {}
 
-    public Book(long id, String title, String author, String isbn, String publisher, int year, String category) {
+    public Book(long id, String title, String author, String isbn, String publisher, int year, String category, double rating) {
         this.id = id;
         this.title = title;
         this.author = author;
@@ -25,6 +20,7 @@ public class Book {
         this.publisher = publisher;
         this.year = year;
         this.category = category;
+        this.rating = rating;
     }
 
     public String getTitle() {
@@ -49,6 +45,10 @@ public class Book {
 
     public String getCategory() {
         return category;
+    }
+
+    public double getRating() {
+        return rating;
     }
 
     public long getId() {

@@ -29,9 +29,24 @@ public class Issue {
     public void setId(long id) {
         this.id = id;
     }
-
     public long getBookId() {
         return this.bookId;
+    }
+
+    public long getUserId() {
+        return userId;
+    }
+
+    public String getUserDescription() {
+        return userDescription;
+    }
+
+    public String getBookDescription() {
+        return bookDescription;
+    }
+
+    public Date getIssuedOn() {
+        return issuedOn;
     }
 
     public boolean returned() {

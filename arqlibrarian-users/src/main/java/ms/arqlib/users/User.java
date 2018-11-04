@@ -45,6 +45,6 @@ public class User {
     }
 
     public String description() {
-        return S.$("%s %s", this.nickname, this.fullname);
+        return S.$("%s: %s", this.nickname, this.fullname);
     }
 }

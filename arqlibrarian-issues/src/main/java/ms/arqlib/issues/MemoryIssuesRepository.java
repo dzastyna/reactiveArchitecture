@@ -1,6 +1,8 @@
 package ms.arqlib.issues;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class MemoryIssuesRepository implements IssuesRepository {
@@ -11,7 +13,6 @@ public class MemoryIssuesRepository implements IssuesRepository {
     }
 
     public void init() {
-        // no issues at start yet
     }
 
     @Override
@@ -31,5 +32,10 @@ public class MemoryIssuesRepository implements IssuesRepository {
         }
 
         return null;
+    }
+
+    @Override
+    public Collection<Issue> findAll() {
+        return Collections.unmodifiableCollection(issues);
     }
 }

@@ -1,11 +1,11 @@
 package ms.arqlib.library;
 
-import ms.arqlib.app.Application;
 import ms.arqlib.SpyUserIn;
 import ms.arqlib.SpyUserOut;
+import ms.arqlib.app.Application;
 import ms.arqlib.app.adapters.IssuesServiceAdapter;
-import ms.arqlib.catalogue.BooksRepository;
 import ms.arqlib.catalogue.BooksApplicationService;
+import ms.arqlib.catalogue.BooksRepository;
 import ms.arqlib.catalogue.MemoryBooksRepository;
 import ms.arqlib.issues.IssuesApplicationService;
 import ms.arqlib.issues.IssuesRepository;

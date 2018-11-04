@@ -11,7 +11,7 @@ public class UsersServiceAdapter implements UsersService {
     }
 
     @Override
-    public String findDescription(long userId) {
+    public String findDescription(Long userId) {
         return this.usersApplicationService.findDescription(userId);
     }
 }

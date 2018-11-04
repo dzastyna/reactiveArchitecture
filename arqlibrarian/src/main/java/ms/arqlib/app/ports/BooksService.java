@@ -3,7 +3,7 @@ package ms.arqlib.app.ports;
 import java.util.Collection;
 
 public interface BooksService {
-    void addBook(String title, String author, String isbn, String publisher, int year, String category);
+    void addBook(AddBookRequest request);
 
     Collection<Book> findAll();
 
@@ -13,5 +13,5 @@ public interface BooksService {
 
     double computeRatingFor(long id);
 
-    void rate(long bookId, int rating);
+    void rate(RateBookRequest request);
 }

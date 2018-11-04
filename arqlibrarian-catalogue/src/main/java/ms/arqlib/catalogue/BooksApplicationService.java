@@ -25,10 +25,10 @@ public class BooksApplicationService {
         return repository.findById(bookId);
     }
 
-    public double computeRatingFor(long id) {
+    public double ratingFor(long id) {
         Book book = repository.findById(id);
 
-        return book.averageRating();
+        return book.getRating();
     }
 
     public void rate(long bookId, int rating) {
@@ -40,6 +40,6 @@ public class BooksApplicationService {
     public String findDescription(long bookId) {
         Book book = this.repository.findById(bookId);
 
-        return book.descrption();
+        return book.description();
     }
 }

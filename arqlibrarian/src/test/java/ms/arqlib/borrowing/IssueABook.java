@@ -23,9 +23,10 @@ public class IssueABook {
 
         fixture.hasBook("Ogniem i mieczem", "Henryk Sienkiewicz", "978-83-08-06015-5", "Wydawnictwo Literackie", 2016, "Podręczniki i lektury szkolne");
         long id = fixture.bookIdByTitle("Ogniem i mieczem");
+        long userId = 1;
 
         //when
-        fixture.userEnters(String.format("issue %d", id));
+        fixture.userEnters(String.format("issue %d %d", userId, id));
         fixture.userEnters(String.format("status %d", id));
 
         fixture.then();

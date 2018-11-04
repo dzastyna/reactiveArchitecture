@@ -9,6 +9,7 @@
     <version>1.0-SNAPSHOT</version>
 
     <dependencies>
+        <!-- TODO remove -->
         <dependency>
             <groupId>ms</groupId>
             <artifactId>arqlibrarian-catalogue</artifactId>

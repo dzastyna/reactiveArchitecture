@@ -41,7 +41,12 @@ class UsersController {
     }
 
     @GetMapping("/{id}")
-    User findById(@PathVariable("id") long id) {
+    User findById(@PathVariable("id") Long id) {
         return this.service.findById(id);
+    }
+
+    @GetMapping("/{userId}/description")
+    String findDescription(@PathVariable Long userId) {
+        return this.service.findDescription(userId);
     }
 }

@@ -11,7 +11,7 @@ public class BooksServiceAdapter implements BooksService {
     }
 
     @Override
-    public String findDescription(long bookId) {
+    public String findDescription(Long bookId) {
         return this.booksApplicationService.findDescription(bookId);
     }
 }

@@ -4,6 +4,8 @@ package ms.arqlib.issues;
 import ms.arqlib.issues.ports.BooksService;
 import ms.arqlib.issues.ports.UsersService;
 
+import java.util.Collection;
+
 public class IssuesApplicationService {
     private UsersService usersService;
     private BooksService booksService;
@@ -29,5 +31,9 @@ public class IssuesApplicationService {
     public boolean issued(long bookId) {
         Issue issue = issuesRepository.findByBookId(bookId);
         return issue != null && issue.returned() == false;
+    }
+
+    public Collection<Issue> findAll() {
+        return this.issuesRepository.findAll();
     }
 }

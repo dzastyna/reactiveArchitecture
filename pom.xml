@@ -17,7 +17,6 @@
 
     <modules>
         <module>arqlibrarian</module>
-        <module>arqlibrarian-atests</module>
         <module>arqlibrarian-issues</module>
         <module>arqlibrarian-issues.rest</module>
         <module>arqlibrarian-catalogue</module>
