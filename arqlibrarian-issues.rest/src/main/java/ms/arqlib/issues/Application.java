@@ -17,11 +17,13 @@ public class Application {
 	@Bean
     public IssuesApplicationService issuesApplicationService(
             RestBooksAdapter booksService, RestUsersAdapter usersService) {
-        IssuesApplicationService issuesApplicationService = new IssuesApplicationService(
+
+	    IssuesApplicationService issuesApplicationService = new IssuesApplicationService(
                 usersService,
                 booksService,
                 new MemoryIssuesRepository());
 
+        // sample issues for demo purposes
         issuesApplicationService.issue(1L, 1L);
         issuesApplicationService.issue(1L, 2L);
 
