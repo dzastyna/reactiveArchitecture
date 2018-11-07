@@ -3,6 +3,7 @@ package ms.arqlib.users;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static ms.strings.S.$;
 
@@ -18,14 +19,13 @@ public class MemoryUsersRepository implements UsersRepository {
 
     @Override
     public User findById(long userId) {
-        User user = users.stream().filter(u -> u.getId() == userId).findFirst().get();
+        Optional<User> user = users.stream().filter(u -> u.getId() == userId).findFirst();
 
-        if (user == null)
-        {
-            throw new UserException($("User not found with id = %d", userId));
+        if (!user.isPresent()) {
+            throw new UserNotFoundException($("User not found with id = %d", userId));
         }
 
-        return user;
+        return user.get();
     }
 
     @Override

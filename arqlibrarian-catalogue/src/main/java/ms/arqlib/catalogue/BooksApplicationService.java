@@ -1,7 +1,6 @@
 package ms.arqlib.catalogue;
 
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.Optional;
 
 import static ms.strings.S.$;
@@ -52,7 +51,7 @@ public class BooksApplicationService {
     public String findDescription(long bookId) {
         Optional<Book> book = this.repository.findById(bookId);
         if (!book.isPresent()) {
-            throw new BookValidationException($("Book id = %d doesn't exits. No description available.", bookId));
+            throw new BookNotFoundException($("Book id = %d doesn't exits. No description available.", bookId));
         }
 
         return book.get().description();

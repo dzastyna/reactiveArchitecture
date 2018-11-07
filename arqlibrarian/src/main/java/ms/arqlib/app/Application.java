@@ -1,10 +1,8 @@
 package ms.arqlib.app;
 
 import ms.arqlib.app.ports.*;
-import ms.strings.S;
 import org.springframework.web.client.ResourceAccessException;
 
-import java.net.ConnectException;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -153,6 +151,7 @@ public class Application {
     private void rateBook(String[] args) {
         if (args.length != 3) {
             output.printLine("Wrong rate command format. Try: rate [book id] [rating]");
+            return;
         }
         long bookId = Long.parseLong(args[1]);
         int rating = Integer.parseInt(args[2]);

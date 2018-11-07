@@ -1,7 +1,6 @@
 package ms.arqlib.catalogue;
 
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.Optional;
 
 public interface BooksRepository {

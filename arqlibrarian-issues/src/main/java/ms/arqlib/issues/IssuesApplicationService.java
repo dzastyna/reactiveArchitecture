@@ -1,8 +1,11 @@
 package ms.arqlib.issues;
 
 
+import ms.arqlib.issues.ports.BookNotFoundException;
 import ms.arqlib.issues.ports.BooksService;
+import ms.arqlib.issues.ports.UserNotFoundException;
 import ms.arqlib.issues.ports.UsersService;
+import ms.strings.S;
 
 import java.util.Collection;
 
@@ -21,13 +24,19 @@ public class IssuesApplicationService {
 
     public void issue(long userId, long bookId) {
         if (issued(bookId)) {
-            throw new IssueException($("Book with id = %d is already issued", bookId));
+            throw new IssueValidationException($("Book with id = %d is already issued", bookId));
         }
 
-        String userDescription = usersService.findDescription(userId);
-        String bookDescription = booksService.findDescription(bookId);
+        try {
+            String userDescription = usersService.findDescription(userId);
+            String bookDescription = booksService.findDescription(bookId);
 
-        issuesRepository.add(new Issue(userId, bookId, userDescription, bookDescription));
+            issuesRepository.add(new Issue(userId, bookId, userDescription, bookDescription));
+        } catch (UserNotFoundException e) {
+            throw new IssueValidationException(S.$("User not found with id = %d", userId));
+        } catch (BookNotFoundException e) {
+            throw new IssueValidationException(S.$("Book not found with id = %d", bookId));
+        }
     }
 
     public boolean issued(long bookId) {

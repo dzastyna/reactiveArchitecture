@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.*;
+import java.util.Collection;
+import java.util.Optional;
 
 import static ms.strings.S.$;
 
@@ -37,7 +38,6 @@ class BooksController {
     public ResponseEntity bookValidation(BookValidationException ex) {
         ErrorInfo error = new ErrorInfo(ex);
         log.error(error);
-
 
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(error);
     }
@@ -121,8 +121,6 @@ class ResponseMessage {
         return message;
     }
 }
-
-
 
 class AddBookRequest {
     final String title;

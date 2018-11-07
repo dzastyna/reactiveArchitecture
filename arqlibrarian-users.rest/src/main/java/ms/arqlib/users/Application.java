@@ -1,12 +1,14 @@
 package ms.arqlib.users;
 
+import ms.rest.service.ErrorInfo;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -29,6 +31,24 @@ public class Application {
 @RestController
 @RequestMapping("/users")
 class UsersController {
+    private final Log log = LogFactory.getLog(getClass());
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity userNotFound(UserNotFoundException ex) {
+        ErrorInfo error = new ErrorInfo(ex);
+        log.error(error);
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
+    @ExceptionHandler(UserException.class)
+    public ResponseEntity general(UserException ex) {
+        ErrorInfo error = new ErrorInfo(ex);
+        log.error(error);
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+    }
+
     private UsersApplicationService service;
 
     UsersController(UsersApplicationService service) {

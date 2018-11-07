@@ -1,11 +1,16 @@
 package ms.arqlib.issues;
 
-import ms.arqlib.issues.adapters.RestBooksAdapter;
-import ms.arqlib.issues.adapters.RestUsersAdapter;
+import ms.arqlib.issues.adapters.RestTemplateBooksAdapter;
+import ms.arqlib.issues.adapters.RestTemplateUsersAdapter;
+import ms.rest.service.ErrorInfo;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
@@ -16,7 +21,7 @@ public class Application {
 
 	@Bean
     public IssuesApplicationService issuesApplicationService(
-            RestBooksAdapter booksService, RestUsersAdapter usersService) {
+            RestTemplateBooksAdapter booksService, RestTemplateUsersAdapter usersService) {
 
 	    IssuesApplicationService issuesApplicationService = new IssuesApplicationService(
                 usersService,
@@ -38,6 +43,16 @@ public class Application {
 @RestController
 @RequestMapping("/issues")
 class IssuesController {
+    private final Log log = LogFactory.getLog(getClass());
+
+    @ExceptionHandler(IssueValidationException.class)
+    public ResponseEntity issueValidation(IssueValidationException ex) {
+        ErrorInfo error = new ErrorInfo(ex);
+        log.error(error);
+
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(error);
+    }
+
     private IssuesApplicationService applicationService;
 
     IssuesController(IssuesApplicationService applicationService) {
