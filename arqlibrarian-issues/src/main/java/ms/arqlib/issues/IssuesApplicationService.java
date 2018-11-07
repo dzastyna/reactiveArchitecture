@@ -6,6 +6,8 @@ import ms.arqlib.issues.ports.UsersService;
 
 import java.util.Collection;
 
+import static ms.strings.S.$;
+
 public class IssuesApplicationService {
     private UsersService usersService;
     private BooksService booksService;
@@ -19,7 +21,7 @@ public class IssuesApplicationService {
 
     public void issue(long userId, long bookId) {
         if (issued(bookId)) {
-            throw new IssueException(S.$("Book with id = %d is already issued", bookId));
+            throw new IssueException($("Book with id = %d is already issued", bookId));
         }
 
         String userDescription = usersService.findDescription(userId);

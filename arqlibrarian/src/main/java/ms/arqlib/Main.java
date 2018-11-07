@@ -1,11 +1,13 @@
 package ms.arqlib;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import ms.arqlib.app.Application;
 import ms.arqlib.app.ConsoleIn;
 import ms.arqlib.app.ConsoleOut;
-import ms.arqlib.app.adapters.RestBooksServiceAdapter;
-import ms.arqlib.app.adapters.RestIssuesServiceAdapter;
-import ms.arqlib.app.adapters.RestUsersServiceAdapter;
+import ms.arqlib.app.adapters.FeignIssuesServiceAdapter;
+import ms.arqlib.app.adapters.FeignUsersServiceAdapter;
+import ms.arqlib.app.adapters.RestTemplateBooksServiceAdapter;
+import ms.arqlib.app.adapters.RestTemplateErrorHandler;
 import ms.arqlib.catalogue.BooksApplicationService;
 import ms.arqlib.catalogue.MemoryBooksRepository;
 import ms.arqlib.issues.IssuesRepository;
@@ -18,16 +20,24 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
 @EnableFeignClients
 public class Main {
 
     @Bean
+    public RestTemplate restTemplate() {
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.setErrorHandler(new RestTemplateErrorHandler(new ObjectMapper()));
+        return restTemplate;
+    }
+
+    @Bean
     CommandLineRunner run(
-            RestBooksServiceAdapter bookServiceAdapter,
-            RestUsersServiceAdapter usersServiceAdapter,
-            RestIssuesServiceAdapter issuesServiceAdapter,
+            RestTemplateBooksServiceAdapter bookServiceAdapter,
+            FeignUsersServiceAdapter usersServiceAdapter,
+            FeignIssuesServiceAdapter issuesServiceAdapter,
             ConfigurableApplicationContext context) {
 
 

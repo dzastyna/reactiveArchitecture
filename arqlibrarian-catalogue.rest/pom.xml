@@ -38,6 +38,16 @@
 			<artifactId>arqlibrarian-catalogue</artifactId>
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>ms</groupId>
+			<artifactId>strings</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+        <dependency>
+            <groupId>ms</groupId>
+            <artifactId>rest-errors</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
 	</dependencies>
 
 	<build>

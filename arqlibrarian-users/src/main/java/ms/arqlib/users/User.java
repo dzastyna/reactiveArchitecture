@@ -1,5 +1,7 @@
 package ms.arqlib.users;
 
+import static ms.strings.S.$;
+
 public class User {
     private final String nickname;
     private final String password;
@@ -45,6 +47,6 @@ public class User {
     }
 
     public String description() {
-        return S.$("%s: %s", this.nickname, this.fullname);
+        return $("%s: %s", this.nickname, this.fullname);
     }
 }

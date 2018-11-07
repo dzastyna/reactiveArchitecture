@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @FeignClient(url="${issues-service.url}", name="${issues-service.name}")
-public interface RestIssuesServiceAdapter extends IssuesService {
+public interface FeignIssuesServiceAdapter extends IssuesService {
     @Override
     @RequestMapping(method = RequestMethod.POST, value = "/issues")
     void issue(@RequestBody IssueBookRequest request);

@@ -23,6 +23,8 @@
         <module>arqlibrarian-catalogue.rest</module>
         <module>arqlibrarian-users</module>
         <module>arqlibrarian-users.rest</module>
+        <module>strings</module>
+        <module>rest-errors</module>
     </modules>
 
 </project>

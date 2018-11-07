@@ -1,15 +1,16 @@
 package ms.arqlib.app.ports;
 
 import java.util.Collection;
+import java.util.Optional;
 
 public interface BooksService {
-    void addBook(AddBookRequest request);
+    Book addBook(AddBookRequest request);
 
     Collection<Book> findAll();
 
     Collection<Book> findByTitle(String toSearch);
 
-    Book findById(long bookId);
+    Optional<Book> findById(long bookId);
 
     double computeRatingFor(long id);
 

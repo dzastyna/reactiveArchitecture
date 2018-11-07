@@ -1,15 +1,17 @@
 package ms.arqlib.catalogue;
 
+import java.util.Collection;
 import java.util.Iterator;
+import java.util.Optional;
 
 public interface BooksRepository {
-    void add(Book book);
+    Book add(Book book);
 
-    Iterator<Book> findAll();
+    Collection<Book> findAll();
 
-    Iterator<Book> findByTitle(String title);
+    Collection<Book> findByTitle(String title);
 
-    Book findById(long id);
+    Optional<Book> findById(long id);
 
     void save(Book book);
 }

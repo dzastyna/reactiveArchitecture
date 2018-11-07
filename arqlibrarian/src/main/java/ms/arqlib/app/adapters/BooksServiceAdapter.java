@@ -6,10 +6,7 @@ import ms.arqlib.app.ports.BooksService;
 import ms.arqlib.app.ports.RateBookRequest;
 import ms.arqlib.catalogue.BooksApplicationService;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class BooksServiceAdapter implements BooksService {
     private BooksApplicationService booksApplicationService;
@@ -30,20 +27,20 @@ public class BooksServiceAdapter implements BooksService {
                 book.getRating());
     }
 
-    List<ms.arqlib.app.ports.Book> adapt(Iterator<ms.arqlib.catalogue.Book> iterator) {
+    Collection<Book> adapt(Collection<ms.arqlib.catalogue.Book> books) {
         List<ms.arqlib.app.ports.Book> result = new ArrayList<>();
 
-        while (iterator.hasNext()) {
-            result.add(adapt(iterator.next()));
+        for (ms.arqlib.catalogue.Book book : books) {
+            result.add(adapt(book));
         }
 
         return result;
     }
 
     @Override
-    public void addBook(AddBookRequest request) {
-        this.booksApplicationService.addBook(
-                request.title, request.author, request.isbn, request.publisher, request.year, request.category);
+    public Book addBook(AddBookRequest request) {
+        return adapt(this.booksApplicationService.addBook(
+                request.title, request.author, request.isbn, request.publisher, request.year, request.category));
     }
 
     @Override
@@ -57,8 +54,13 @@ public class BooksServiceAdapter implements BooksService {
     }
 
     @Override
-    public Book findById(long bookId) {
-        return adapt(this.booksApplicationService.findById(bookId));
+    public Optional<Book> findById(long bookId) {
+        Optional<ms.arqlib.catalogue.Book> found = this.booksApplicationService.findById(bookId);
+        if (!found.isPresent()) {
+            return Optional.empty();
+        }
+
+        return Optional.of(adapt(found.get()));
     }
 
     @Override

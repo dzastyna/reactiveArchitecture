@@ -4,6 +4,7 @@ import ms.arqlib.SpyUserIn;
 import ms.arqlib.SpyUserOut;
 import ms.arqlib.app.Application;
 import ms.arqlib.app.adapters.IssuesServiceAdapter;
+import ms.arqlib.catalogue.Book;
 import ms.arqlib.catalogue.BooksApplicationService;
 import ms.arqlib.catalogue.BooksRepository;
 import ms.arqlib.catalogue.MemoryBooksRepository;
@@ -15,6 +16,8 @@ import ms.arqlib.issues.adapters.UsersServiceAdapter;
 import ms.arqlib.users.MemoryUsersRepository;
 import ms.arqlib.users.UsersApplicationService;
 import ms.arqlib.users.UsersRepository;
+
+import java.util.Collection;
 
 public class LibraryFixture {
 
@@ -129,11 +132,10 @@ public class LibraryFixture {
         return publisher;
     }
 
-    public long bookByTitle(String title) {
-        return this.booksApplicationService.findByTitle(title).next().getId();
+    public long bookIdByTitle(String title) {
+        Collection<Book> books = this.booksApplicationService.findByTitle(title);
+        Book firstBook = books.iterator().next();
+        return firstBook.getId();
     }
 
-    public long bookIdByTitle(String title) {
-        return this.booksApplicationService.findByTitle(title).next().getId();
-    }
 }

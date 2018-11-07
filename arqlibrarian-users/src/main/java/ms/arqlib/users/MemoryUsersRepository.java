@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static ms.strings.S.$;
+
 public class MemoryUsersRepository implements UsersRepository {
     private static final List<User> users = new ArrayList<User>();
 
@@ -20,7 +22,7 @@ public class MemoryUsersRepository implements UsersRepository {
 
         if (user == null)
         {
-            throw new UserException(S.$("User not found with id = %d", userId));
+            throw new UserException($("User not found with id = %d", userId));
         }
 
         return user;

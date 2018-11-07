@@ -3,6 +3,7 @@ package ms.arqlib.app;
 import ms.arqlib.app.ports.*;
 
 import java.util.Collection;
+import java.util.Optional;
 
 public class Application {
 
@@ -76,9 +77,14 @@ public class Application {
         long bookId = Long.parseLong(args[1]);
 
         boolean issued = issuesService.issued(bookId);
-        Book book = booksService.findById(bookId);
+        Optional<Book> book = booksService.findById(bookId);
 
-        output.printLine(String.format("%s %s", issuedToString(issued), basicInfoFor(book)));
+
+        if (book.isPresent()) {
+            output.printLine(String.format("%s %s", issuedToString(issued), basicInfoFor(book.get())));
+        } else {
+            output.printLine(String.format("Book id = %d not found", bookId));
+        }
     }
 
     private String issuedToString(boolean issued) {
@@ -89,9 +95,13 @@ public class Application {
         long issuerId = Long.parseLong(args[1]);
         long bookId = Long.parseLong(args[2]);
         issuesService.issue(new IssueBookRequest(issuerId, bookId));
-        Book book = booksService.findById(bookId);
 
-        output.printLine(String.format("Issued: %s", basicInfoFor(book)));
+        Optional<Book> book = booksService.findById(bookId);
+        if (book.isPresent()) {
+            output.printLine(String.format("Issued: %s", basicInfoFor(book.get())));
+        } else {
+            output.printLine(String.format("Book id = % not found", bookId));
+        }
     }
 
     private void addBook() {
@@ -119,18 +129,26 @@ public class Application {
     }
 
     private void rateBook(String[] args) {
-        if (args.length != 3)
-        {
+        if (args.length != 3) {
             output.printLine("Wrong rate command format. Try: rate [book id] [rating]");
         }
         long bookId = Long.parseLong(args[1]);
         int rating = Integer.parseInt(args[2]);
 
-        booksService.rate(new RateBookRequest(bookId, rating));
-        Book book = booksService.findById(bookId);
-        double totalRating = booksService.computeRatingFor(bookId);
+        try {
+            booksService.rate(new RateBookRequest(bookId, rating));
+        } catch (BooksServiceException e) {
+            output.printLine(e.getMessage());
+            return;
+        }
 
-        output.printLine(String.format("%s rated: %d, total rating: %1.1f", book.getTitle(), rating, totalRating));
+        Optional<Book> book = booksService.findById(bookId);
+        if (book.isPresent()) {
+            double totalRating = booksService.computeRatingFor(bookId);
+            output.printLine(String.format("%s rated: %d, total rating: %1.1f", book.get().getTitle(), rating, totalRating));
+        } else {
+            output.printLine(String.format("Book id = %d not found", bookId));
+        }
     }
 
     private void searchBook(String commandString) {

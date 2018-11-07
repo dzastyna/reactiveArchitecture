@@ -1,5 +1,7 @@
 package ms.arqlib.catalogue;
 
+import ms.strings.S;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,6 +58,10 @@ public class Book {
     }
 
     public void rate(int rating) {
+        if (rating < 1 || rating > 5) {
+            throw new BookValidationException("Rating value should be between [1, 5] and is " + rating);
+        }
+
         ratings.add(new SingleRating(rating));
     }
 

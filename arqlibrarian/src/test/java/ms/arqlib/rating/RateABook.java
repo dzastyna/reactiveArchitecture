@@ -19,7 +19,7 @@ public class RateABook {
         fixture.applicationStarted();
         fixture.hasSampleBooks();
         fixture.hasBook("Ogniem i mieczem", "Henryk Sienkiewicz", "978-83-08-06015-5", "Wydawnictwo Literackie", 2016, "Podręczniki i lektury szkolne");
-        long id = fixture.bookByTitle("Ogniem i mieczem");
+        long id = fixture.bookIdByTitle("Ogniem i mieczem");
         final int RATING = 4;
 
         //when
@@ -37,7 +37,7 @@ public class RateABook {
         fixture.applicationStarted();
         fixture.hasSampleBooks();
         fixture.hasBook("Ogniem i mieczem", "Henryk Sienkiewicz", "978-83-08-06015-5", "Wydawnictwo Literackie", 2016, "Podręczniki i lektury szkolne");
-        long id = fixture.bookByTitle("Ogniem i mieczem");
+        long id = fixture.bookIdByTitle("Ogniem i mieczem");
         final int FIRST_RATING = 4;
         fixture.userEnters(String.format("rate %d %d", id, FIRST_RATING));
 

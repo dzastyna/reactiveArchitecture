@@ -1,8 +1,7 @@
 package ms.arqlib.catalogue;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import javax.swing.text.html.Option;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class MemoryBooksRepository implements BooksRepository {
@@ -13,32 +12,28 @@ public class MemoryBooksRepository implements BooksRepository {
     }
 
     @Override
-    public void add(Book book) {
+    public Book add(Book book) {
         book.setId(Generated.bookId());
         books.add(book);
-    }
-
-    @Override
-    public Iterator<Book> findAll() {
-        return books.iterator();
-    }
-
-    @Override
-    public Iterator<Book> findByTitle(String title) {
-        return books.stream()
-                .filter(b -> b.getTitle().toLowerCase().contains(title.toLowerCase()))
-                .collect(Collectors.toList()).iterator();
-    }
-
-    @Override
-    public Book findById(long id) {
-        Book book = books.stream().filter(b -> b.getId() == id).findFirst().get();
-
-        if (book == null) {
-            throw new CatalogueException(String.format("Book not found with id = %d", id));
-        }
 
         return book;
+    }
+
+    @Override
+    public Collection<Book> findAll() {
+        return Collections.unmodifiableCollection(books);
+    }
+
+    @Override
+    public Collection<Book> findByTitle(String title) {
+        return books.stream()
+                .filter(b -> b.getTitle().toLowerCase().contains(title.toLowerCase()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public Optional<Book> findById(long id) {
+        return books.stream().filter(b -> b.getId() == id).findFirst();
     }
 
     @Override
