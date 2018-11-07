@@ -1,7 +1,9 @@
 package ms.arqlib.app.ports;
 
+import ms.arqlib.issues.Issue;
+
 public interface IssuesService {
-    void issue(IssueBookRequest request);
+    Issue issue(IssueBookRequest request);
     boolean issued(long bookId);
 }
 

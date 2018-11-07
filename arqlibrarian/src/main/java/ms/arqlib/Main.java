@@ -6,6 +6,7 @@ import ms.arqlib.app.ConsoleOut;
 import ms.arqlib.app.adapters.FeignIssuesServiceAdapter;
 import ms.arqlib.app.adapters.FeignUsersServiceAdapter;
 import ms.arqlib.app.adapters.RestTemplateBooksServiceAdapter;
+import ms.arqlib.app.adapters.RestTemplateIssuesServiceAdapter;
 import ms.arqlib.catalogue.BooksApplicationService;
 import ms.arqlib.catalogue.MemoryBooksRepository;
 import ms.arqlib.issues.IssuesRepository;
@@ -27,7 +28,7 @@ public class Main {
     CommandLineRunner run(
             RestTemplateBooksServiceAdapter bookServiceAdapter,
             FeignUsersServiceAdapter usersServiceAdapter,
-            FeignIssuesServiceAdapter issuesServiceAdapter,
+            RestTemplateIssuesServiceAdapter issuesServiceAdapter,
             ConfigurableApplicationContext context) {
 
 

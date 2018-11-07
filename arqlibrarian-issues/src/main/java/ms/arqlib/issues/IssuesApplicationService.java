@@ -22,7 +22,7 @@ public class IssuesApplicationService {
         this.issuesRepository = borrowingRepository;
     }
 
-    public void issue(long userId, long bookId) {
+    public Issue issue(long userId, long bookId) {
         if (issued(bookId)) {
             throw new IssueValidationException($("Book with id = %d is already issued", bookId));
         }
@@ -31,7 +31,10 @@ public class IssuesApplicationService {
             String userDescription = usersService.findDescription(userId);
             String bookDescription = booksService.findDescription(bookId);
 
-            issuesRepository.add(new Issue(userId, bookId, userDescription, bookDescription));
+            Issue issue = new Issue(userId, bookId, userDescription, bookDescription);
+            issuesRepository.add(issue);
+
+            return issue;
         } catch (UserNotFoundException e) {
             throw new IssueValidationException(S.$("User not found with id = %d", userId));
         } catch (BookNotFoundException e) {

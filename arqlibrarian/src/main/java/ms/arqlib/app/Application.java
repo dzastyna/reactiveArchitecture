@@ -1,14 +1,19 @@
 package ms.arqlib.app;
 
+import ms.arqlib.app.adapters.IssueServiceException;
 import ms.arqlib.app.ports.*;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.web.client.ResourceAccessException;
 
 import java.util.Collection;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 import static ms.strings.S.$;
 
 public class Application {
+    private final Log log = LogFactory.getLog(getClass());
 
     private UserIn input;
     private UserOut output;
@@ -114,7 +119,14 @@ public class Application {
     private void issueBook(String[] args) {
         long issuerId = Long.parseLong(args[1]);
         long bookId = Long.parseLong(args[2]);
-        issuesService.issue(new IssueBookRequest(issuerId, bookId));
+        try {
+            issuesService.issue(new IssueBookRequest(issuerId, bookId));
+        } catch (IssueServiceException e) {
+            output.printLine(e.getMessage());
+            log.error(e);
+
+            return;
+        }
 
         Optional<Book> book = booksService.findById(bookId);
         if (book.isPresent()) {
@@ -160,6 +172,8 @@ public class Application {
             booksService.rate(new RateBookRequest(bookId, rating));
         } catch (BooksServiceException e) {
             output.printLine(e.getMessage());
+            log.error(e);
+
             return;
         }
 
