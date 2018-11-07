@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Collection;
 import java.util.Optional;
 
+@Deprecated
 @FeignClient(url="${books-service.url}", name="${books-service.name}")
 public interface FeignBooksServiceAdapter extends BooksService {
     @Override

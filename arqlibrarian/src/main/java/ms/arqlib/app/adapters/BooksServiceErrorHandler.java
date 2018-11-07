@@ -13,18 +13,19 @@ import static ms.strings.S.from;
 import static org.springframework.http.HttpStatus.Series.CLIENT_ERROR;
 import static org.springframework.http.HttpStatus.Series.SERVER_ERROR;
 
-public class RestTemplateErrorHandler implements ResponseErrorHandler {
+public class BooksServiceErrorHandler implements ResponseErrorHandler {
 
     private ObjectMapper mapper;
 
-    public RestTemplateErrorHandler(ObjectMapper mapper) {
+    public BooksServiceErrorHandler(ObjectMapper mapper) {
         this.mapper = mapper;
     }
 
     @Override
     public boolean hasError(ClientHttpResponse httpResponse) throws IOException {
-        return (httpResponse.getStatusCode().series() == CLIENT_ERROR || httpResponse.getStatusCode().series() == SERVER_ERROR)
+        boolean mightBeError = (httpResponse.getStatusCode().series() == CLIENT_ERROR || httpResponse.getStatusCode().series() == SERVER_ERROR)
                 && httpResponse.getStatusCode() != HttpStatus.NOT_FOUND;
+        return mightBeError;
     }
 
     @Override

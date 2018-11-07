@@ -1,9 +1,14 @@
 package ms.arqlib.app;
 
 import ms.arqlib.app.ports.*;
+import ms.strings.S;
+import org.springframework.web.client.ResourceAccessException;
 
+import java.net.ConnectException;
 import java.util.Collection;
 import java.util.Optional;
+
+import static ms.strings.S.$;
 
 public class Application {
 
@@ -43,34 +48,51 @@ public class Application {
         while (running) {
             output.print("> ");
             String commandString = input.readLine();
-            String[] args = commandString.split(" ");
-            String commandName = args[0];
 
-            switch (commandName)
-            {
-                case "exit":
-                    running = false;
-                    break;
-                case "search":
-                    this.searchBook(commandString);
-                    break;
-                case "rate":
-                    this.rateBook(args);
-                    break;
-                case "add":
-                    this.addBook();
-                    break;
-                case "issue":
-                    this.issueBook(args);
-                    break;
-                case "status":
-                    this.showStatus(args);
-                    break;
-                default:
-                    output.printLine(String.format("Command %s not recognized", commandName));
-                    break;
+            try {
+                running = processCommand(commandString);
+                //TODO get rid of spring specific exception
+            } catch (ResourceAccessException e) {
+                System.out.println($("No connection to service: %s", e.getMessage()));
+                e.printStackTrace();
+            } catch (Throwable t) {
+                System.out.println("General exception: " + t.getMessage());
+                t.printStackTrace();
             }
         }
+    }
+
+    private boolean processCommand(String commandString) {
+        boolean running = true;
+        String[] args = commandString.split(" ");
+        String commandName = args[0];
+
+        switch (commandName)
+        {
+            case "exit":
+                running = false;
+                break;
+            case "search":
+                this.searchBook(commandString);
+                break;
+            case "rate":
+                this.rateBook(args);
+                break;
+            case "add":
+                this.addBook();
+                break;
+            case "issue":
+                this.issueBook(args);
+                break;
+            case "status":
+                this.showStatus(args);
+                break;
+            default:
+                output.printLine(String.format("Command %s not recognized", commandName));
+                break;
+        }
+
+        return running;
     }
 
     private void showStatus(String[] args) {
