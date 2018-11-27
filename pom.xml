@@ -24,7 +24,10 @@
         <module>arqlibrarian-users</module>
         <module>arqlibrarian-users.rest</module>
         <module>strings</module>
-        <module>rest-errors</module>
+        <module>rest-tools</module>
+        <module>arqlibrarian-auth</module>
+        <module>arqlibrarian-registry</module>
+        <module>arqlibrarian-gateway</module>
     </modules>
 
 </project>

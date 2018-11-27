@@ -8,7 +8,6 @@ import org.springframework.web.client.ResourceAccessException;
 
 import java.util.Collection;
 import java.util.Optional;
-import java.util.logging.Logger;
 
 import static ms.strings.S.$;
 

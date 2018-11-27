@@ -3,7 +3,6 @@ package ms.arqlib;
 import ms.arqlib.app.Application;
 import ms.arqlib.app.ConsoleIn;
 import ms.arqlib.app.ConsoleOut;
-import ms.arqlib.app.adapters.FeignIssuesServiceAdapter;
 import ms.arqlib.app.adapters.FeignUsersServiceAdapter;
 import ms.arqlib.app.adapters.RestTemplateBooksServiceAdapter;
 import ms.arqlib.app.adapters.RestTemplateIssuesServiceAdapter;

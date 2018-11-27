@@ -1,7 +1,8 @@
 package ms.arqlib.app.adapters;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ms.arqlib.app.ports.*;
+import ms.arqlib.app.ports.IssueBookRequest;
+import ms.arqlib.app.ports.IssuesService;
 import ms.arqlib.issues.Issue;
 import ms.rest.client.ErrorInfo;
 import org.springframework.beans.factory.annotation.Value;

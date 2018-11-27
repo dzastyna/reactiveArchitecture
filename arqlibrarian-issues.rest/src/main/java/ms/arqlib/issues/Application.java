@@ -1,87 +1,102 @@
 package ms.arqlib.issues;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import ms.arqlib.issues.adapters.BookServiceErrorHandler;
 import ms.arqlib.issues.adapters.RestTemplateBooksAdapter;
 import ms.arqlib.issues.adapters.RestTemplateUsersAdapter;
-import ms.rest.service.ErrorInfo;
+import ms.arqlib.issues.adapters.UsersServiceErrorHandler;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.Collection;
+import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
 @EnableFeignClients
+@EnableDiscoveryClient
 public class Application {
+    private final Log log = LogFactory.getLog(getClass());
 
-	@Bean
+    @Bean("booksRestTemplate")
+    @LoadBalanced
+    RestTemplate booksRestTemplate(RestTemplateBuilder builder, @Value("${books-service.url}") String url) {
+        return builder
+                .rootUri(url)
+                .errorHandler(new BookServiceErrorHandler(new ObjectMapper()))
+                .build();
+    }
+
+    @Bean("usersRestTemplate")
+    @LoadBalanced
+    RestTemplate usersRestTemplate(RestTemplateBuilder builder, @Value("${users-service.url}") String url) {
+        return builder
+                .rootUri(url)
+                .errorHandler(new UsersServiceErrorHandler(new ObjectMapper()))
+                .build();
+    }
+
+    @Bean
     public IssuesApplicationService issuesApplicationService(
-            RestTemplateBooksAdapter booksService, RestTemplateUsersAdapter usersService) {
+            RestTemplateBooksAdapter booksService, RestTemplateUsersAdapter usersService, DiscoveryClient discoveryClient) {
 
 	    IssuesApplicationService issuesApplicationService = new IssuesApplicationService(
                 usersService,
                 booksService,
                 new MemoryIssuesRepository());
 
-        // sample issues for demo purposes
-        issuesApplicationService.issue(1L, 1L);
-        issuesApplicationService.issue(1L, 2L);
-
         return issuesApplicationService;
+    }
+
+    @Component
+    class AppRunner implements ApplicationRunner {
+        private IssuesApplicationService service;
+
+        public AppRunner(IssuesApplicationService service) {
+            this.service = service;
+        }
+
+        @Override
+        public void run(ApplicationArguments args) throws Exception {
+            log.debug("Started (issues rest)");
+
+            service.issue(1L, 1L);
+            service.issue(1L, 2L);
+            service.issue(1L, 3L);
+        }
+    }
+
+    // Alternative startup
+    // @Component
+    class AfterStartup implements ApplicationListener<ApplicationReadyEvent> {
+        private IssuesApplicationService service;
+
+        public AfterStartup(IssuesApplicationService service) {
+            this.service = service;
+        }
+
+        @Override
+        public void onApplicationEvent(ApplicationReadyEvent event) {
+            log.debug("Started");
+
+            service.issue(1L, 1L);
+            service.issue(1L, 2L);
+        }
     }
 
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
 	}
-}
-
-@RestController
-@RequestMapping("/issues")
-class IssuesController {
-    private final Log log = LogFactory.getLog(getClass());
-
-    @ExceptionHandler(IssueValidationException.class)
-    public ResponseEntity issueValidation(IssueValidationException ex) {
-        ErrorInfo error = new ErrorInfo(ex);
-        log.error(error);
-
-        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(error);
-    }
-
-    private IssuesApplicationService applicationService;
-
-    IssuesController(IssuesApplicationService applicationService) {
-        this.applicationService = applicationService;
-    }
-
-    @PostMapping
-    public void issue(@RequestBody IssueRequest request) {
-        this.applicationService.issue(request.userId, request.bookId);
-    }
-
-    @GetMapping("/{id}/issued")
-    public boolean issued(@PathVariable("id") Long bookId) {
-        return this.applicationService.issued(bookId);
-    }
-
-    @GetMapping
-    public Collection<Issue> findAll() {
-        return this.applicationService.findAll();
-    }
-}
-
-class IssueRequest {
-    long userId;
-    long bookId;
-
-    public IssueRequest(long userId, long bookId) {
-        this.userId = userId;
-        this.bookId = bookId;
-    }
 }
 
