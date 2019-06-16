@@ -5,6 +5,8 @@ import ms.arqlib.app.ports.AddBookRequest;
 import ms.arqlib.app.ports.Book;
 import ms.arqlib.app.ports.BooksService;
 import ms.arqlib.app.ports.RateBookRequest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpMethod;
@@ -22,11 +24,8 @@ import java.util.Optional;
 public class RestTemplateBooksServiceAdapter implements BooksService {
     private RestTemplate restTemplate;
 
-    public RestTemplateBooksServiceAdapter(@Value("${books-service.url}") String booksServiceUrl) {
-        this.restTemplate = new RestTemplateBuilder()
-                .rootUri(booksServiceUrl)
-                .errorHandler(new BooksServiceErrorHandler(new ObjectMapper()))
-                .build();
+    public RestTemplateBooksServiceAdapter(@Autowired @Qualifier("booksRestTemplate") RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
     }
 
     @Override

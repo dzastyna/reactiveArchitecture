@@ -1,11 +1,14 @@
 package ms.arqlib.catalogue;
 
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.env.Environment;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
@@ -36,6 +39,19 @@ public class Application {
 
 		return new BooksApplicationService(repository);
 	}
+
+//	@Bean
+//    InitializingBean displayEurekaProperties(@Value("${EUREKA_SERVER}") String eurekaServer,
+//                                             @Value("${eureka.server}") String euerkaServer2,
+//                                             @Value("${MY_EUREKA_SERVER}") String eurekaServer3,
+//                                             @Value("${my.eureka.server}") String euerkaServer4) {
+//        return () -> {
+//            System.out.println("EUREKA_SEVER " + eurekaServer);
+//            System.out.println("eureka.server " + euerkaServer2);
+//            System.out.println("MY_EUREKA_SEVER " + eurekaServer3);
+//            System.out.println("my.eureka.server " + euerkaServer4);
+//        };
+//    }
 
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);

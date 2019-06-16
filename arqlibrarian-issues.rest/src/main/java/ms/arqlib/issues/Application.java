@@ -59,41 +59,6 @@ public class Application {
         return issuesApplicationService;
     }
 
-    @Component
-    class AppRunner implements ApplicationRunner {
-        private IssuesApplicationService service;
-
-        public AppRunner(IssuesApplicationService service) {
-            this.service = service;
-        }
-
-        @Override
-        public void run(ApplicationArguments args) throws Exception {
-            log.debug("Started (issues rest)");
-
-            service.issue(1L, 1L);
-            service.issue(1L, 2L);
-            service.issue(1L, 3L);
-        }
-    }
-
-    // Alternative startup
-    // @Component
-    class AfterStartup implements ApplicationListener<ApplicationReadyEvent> {
-        private IssuesApplicationService service;
-
-        public AfterStartup(IssuesApplicationService service) {
-            this.service = service;
-        }
-
-        @Override
-        public void onApplicationEvent(ApplicationReadyEvent event) {
-            log.debug("Started");
-
-            service.issue(1L, 1L);
-            service.issue(1L, 2L);
-        }
-    }
 
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);

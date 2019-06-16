@@ -52,4 +52,8 @@ public class Issue {
     public boolean returned() {
         return returnedOn.isPresent();
     }
+
+    public Optional<LocalDate> getReturnedOn() {
+        return returnedOn;
+    }
 }

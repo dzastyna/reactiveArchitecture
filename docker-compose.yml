@@ -1,0 +1,55 @@
+version: '3'
+services:
+  registry:
+    build: arqlibrarian-registry
+    image: arq-regisistry:1.0
+    ports:
+      - "8761:8761"
+    restart: always
+
+  catalogue:
+    build: arqlibrarian-catalogue.rest
+    image: arq-catalogue:1.0
+    environment:
+      - EUREKA_SERVER=http://registry:8761/eureka
+    depends_on:
+      - registry
+    # not visible outside
+#    ports:
+#      - "6700-6709:6700"
+    restart: always
+
+  users:
+    build: arqlibrarian-users.rest
+    image: arq-users:1.0
+    environment:
+      - EUREKA_SERVER=http://registry:8761/eureka
+    depends_on:
+      - registry
+# not visible outside
+#    ports:
+#      - "6710-6719:6701"
+    restart: always
+
+  issues:
+    build: arqlibrarian-issues.rest
+    image: arq-issues:1.0
+    environment:
+      - EUREKA_SERVER=http://registry:8761/eureka
+    depends_on:
+      - registry
+# not visible outside
+#    ports:
+#      - "6720-6729:6702"
+    restart: always
+
+  gateway:
+    build: arqlibrarian-gateway
+    image: arq-gateway:1.0
+    environment:
+      - EUREKA_SERVER=http://registry:8761/eureka
+    depends_on:
+      - registry
+    ports:
+      - "8083:8083"
+    restart: always

@@ -2,7 +2,7 @@ package ms.arqlib.app.adapters;
 
 import ms.arqlib.app.ports.IssueBookRequest;
 import ms.arqlib.app.ports.IssuesService;
-import ms.arqlib.issues.Issue;
+import ms.arqlib.app.ports.Issue;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
