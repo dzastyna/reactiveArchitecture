@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catalogue
+  labels:
+    app: catalogue
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: catalogue
+  template:
+    metadata:
+      labels:
+        app: catalogue
+    spec:
+      containers:
+        - image: arq-catalogue:latest
+          name: catalogue
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 6700
+          env:
+            - name: EUREKA_SERVER
+              value: http://registry:8761/eureka
+      restartPolicy: Always

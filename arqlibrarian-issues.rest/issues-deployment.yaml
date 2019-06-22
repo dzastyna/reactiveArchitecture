@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: issues
+  labels:
+    app: issues
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: issues
+  template:
+    metadata:
+      labels:
+        app: issues
+    spec:
+      containers:
+        - image: arq-issues:latest
+          name: issues
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 6702
+          env:
+            - name: EUREKA_SERVER
+              value: http://registry:8761/eureka
+      restartPolicy: Always
