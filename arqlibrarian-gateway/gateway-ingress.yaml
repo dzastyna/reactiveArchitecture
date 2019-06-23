@@ -1,0 +1,26 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: gateway-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  backend:
+    serviceName: default-http-backend
+    servicePort: 80
+  rules:
+    - host: arqlib.info
+      http:
+        paths:
+          - path: /ingress-books(/|$)(.*)
+            backend:
+              serviceName: catalogue
+              servicePort: 6700
+          - path: /ingress-users(/|$)(.*)
+            backend:
+              serviceName: users
+              servicePort: 6701
+          - path: /ingress-issues(/|$)(.*)
+            backend:
+              serviceName: issues
+              servicePort: 6702

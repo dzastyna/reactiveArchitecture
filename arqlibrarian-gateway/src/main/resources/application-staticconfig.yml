@@ -1,0 +1,12 @@
+zuul:
+  routes:
+    books-service:
+      path: /zuul-catalogue/**
+      url: http://catalogue:6700
+    users-service:
+      path: /zuul-users/**
+      url: http://users:6701
+    issues:
+      path: /zuul-issues/**
+      url: http://issues:6702
+

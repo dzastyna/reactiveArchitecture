@@ -1,0 +1,11 @@
+zuul:
+  routes:
+    books-service:
+      path: /zuul-catalogue/**
+    users-service:
+      path: /zuul-users/**
+    issues:
+      path: /zuul-issues/**
+  ignored-services: '*'
+
+

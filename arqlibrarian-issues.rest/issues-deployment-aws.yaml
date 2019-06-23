@@ -1,28 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: gateway
+  name: issues
   labels:
-    app: gateway
+    app: issues
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: gateway
+      app: issues
   template:
     metadata:
       labels:
-        app: gateway
+        app: issues
     spec:
       containers:
-        - image: arq-gateway:latest
-          name: gateway
-          imagePullPolicy: Never
+        - image: msieraczkiewicz/arq-issues:latest
+          name: issues
+          imagePullPolicy: Always
           ports:
-            - containerPort: 8083
+            - containerPort: 6702
           env:
             - name: EUREKA_SERVER
               value: http://registry:8761/eureka
-            - name: SPRING_PROFILES_ACTIVE
-              value: gateway,staticconfig
       restartPolicy: Always

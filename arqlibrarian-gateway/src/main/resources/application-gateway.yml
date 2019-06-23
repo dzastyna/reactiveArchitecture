@@ -1,0 +1,19 @@
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          lower-case-service-id: true
+          enabled: true
+      routes:
+        - id: books_service
+          uri: lb://books-service
+          predicates:
+            - Path=/catalogue/**
+          filters:
+            - RewritePath=/catalogue/(?<fragment>.*), /$\{fragment}
+eureka:
+  client:
+    register-with-eureka: false
+
+logging.level.org.springframework.cloud.gateway: DEBUG

@@ -1,28 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: gateway
+  name: spring-gateway
   labels:
-    app: gateway
+    app: spring-gateway
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: gateway
+      app: spring-gateway
   template:
     metadata:
       labels:
-        app: gateway
+        app: spring-gateway
     spec:
       containers:
-        - image: arq-gateway:latest
-          name: gateway
+        - image: spring-gateway:latest
+          name: spring-gateway
           imagePullPolicy: Never
           ports:
-            - containerPort: 8083
+            - containerPort: 8080
           env:
             - name: EUREKA_SERVER
               value: http://registry:8761/eureka
-            - name: SPRING_PROFILES_ACTIVE
-              value: gateway,staticconfig
       restartPolicy: Always

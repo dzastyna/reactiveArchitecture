@@ -1,12 +1,12 @@
 package ms.arqlibrarian.gateway;
 
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.UserInfoRestTemplateFactory;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
-import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,16 +15,15 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.filter.CommonsRequestLoggingFilter;
 
-@EnableDiscoveryClient
-@EnableZuulProxy
 @SpringBootApplication
-@EnableHystrix
 public class Application {
-
-    public final static String SECURED = "secured";
-    public final static String DEBUG = "debug";
+    final static String SECURED = "secured";
+    final static String DEBUG = "debug";
+    final static String DEFAULT = "default";
+    final static String GATEWAY = "gateway";
 
     @Profile(Application.DEBUG)
     @Bean
@@ -41,6 +40,26 @@ public class Application {
         SpringApplication.run(Application.class, args);
     }
 }
+
+
+@Profile(Application.DEFAULT)
+@Configuration
+@EnableZuulProxy
+@EnableDiscoveryClient
+class ZuulConfiguration {
+    @LoadBalanced
+    @Bean
+    RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
+}
+
+@Profile(Application.GATEWAY)
+@EnableDiscoveryClient
+class GatewayConfiguration {
+
+}
+
 
 @Profile(Application.SECURED)
 @Configuration
