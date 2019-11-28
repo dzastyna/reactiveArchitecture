@@ -42,7 +42,7 @@ public class LibraryFixture {
         this.application = new Application(userIn, userOut);
 
         BooksRepository booksRepository = createBooksRepository();
-        this.booksApplicationService = new BooksApplicationService(booksRepository);
+        this.booksApplicationService = new BooksApplicationService(booksRepository, e -> System.out.println("Dummy publisher"));
         this.application.setup(new ms.arqlib.app.adapters.BooksServiceAdapter(this.booksApplicationService));
 
         UsersRepository usersRepository = createUserRepository();

@@ -52,4 +52,8 @@ public class Issue {
     public boolean returned() {
         return returnedOn.isPresent();
     }
+
+    public void changeBookDescription(String newDescription) {
+        this.bookDescription = newDescription;
+    }
 }

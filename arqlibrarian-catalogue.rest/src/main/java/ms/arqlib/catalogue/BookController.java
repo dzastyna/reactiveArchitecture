@@ -108,6 +108,11 @@ class BooksController {
     String bookDescription(@PathVariable Long bookId) {
         return this.service.findDescription(bookId);
     }
+
+    @PostMapping("/descriptions")
+    String changeBookTitle(@RequestBody ChangeBookTitleRequest request) {
+        return this.service.changeBookTitle(request.bookId, request.title);
+    }
 }
 
 class ResponseMessage {
@@ -150,3 +155,14 @@ class RateBookRequest {
         this.rating = rating;
     }
 }
+
+class ChangeBookTitleRequest {
+    final long bookId;
+    final String title;
+
+    ChangeBookTitleRequest(long bookId, String title) {
+        this.bookId = bookId;
+        this.title = title;
+    }
+}
+

@@ -1,15 +1,19 @@
 package ms.arqlib.catalogue;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 import static ms.strings.S.$;
 
 public class BooksApplicationService {
+    private Publisher publisher;
     private BooksRepository repository;
 
-    public BooksApplicationService(BooksRepository repository) {
+    public BooksApplicationService(BooksRepository repository, Publisher publisher) {
+
         this.repository = repository;
+        this.publisher = publisher;
     }
 
     public Book addBook(String title, String author, String isbn, String publisher, int year, String category) {
@@ -48,12 +52,29 @@ public class BooksApplicationService {
         repository.save(book);
     }
 
+    public String changeBookTitle(long bookId, String newTitle) {
+        Book book = repository
+                .findById(bookId)
+                .orElseThrow(() -> bookNotFoundException(bookId));
+
+        book.setTitle(newTitle);
+
+        List<DomainEvent> events = book.getEvents();
+
+        publisher.publish(events);
+        return newTitle;
+    }
+
     public String findDescription(long bookId) {
         Optional<Book> book = this.repository.findById(bookId);
         if (!book.isPresent()) {
-            throw new BookNotFoundException($("Book id = %d doesn't exits. No description available.", bookId));
+            throw bookNotFoundException(bookId);
         }
 
         return book.get().description();
+    }
+
+    private BookNotFoundException bookNotFoundException(long bookId) {
+        return new BookNotFoundException($("Book id = %d doesn't exits. No description available.", bookId));
     }
 }

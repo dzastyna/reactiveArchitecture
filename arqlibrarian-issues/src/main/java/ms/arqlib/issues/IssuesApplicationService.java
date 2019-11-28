@@ -50,4 +50,12 @@ public class IssuesApplicationService {
     public Collection<Issue> findAll() {
         return this.issuesRepository.findAll();
     }
+
+    public void
+    bookDescriptionChanged(long bookId, String bookDesscription) {
+        Issue issue = issuesRepository.findByBookId(bookId);
+        if (issue != null) {
+            issue.changeBookDescription(bookDesscription);
+        }
+    }
 }

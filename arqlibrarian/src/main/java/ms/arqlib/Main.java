@@ -51,7 +51,7 @@ public class Main {
         MemoryBooksRepository booksRepository = new MemoryBooksRepository();
         booksRepository.init();
 
-        return new BooksApplicationService(booksRepository);
+        return new BooksApplicationService(booksRepository, e -> System.out.println("Dummy publisher"));
     }
 
     private static IssuesRepository createMemoryIssuesRepository()

@@ -7,13 +7,15 @@ import java.util.List;
 
 public class Book {
     private long id;
-    private final String title;
+    private String title;
     private final String author;
     private final String isbn;
     private final String publisher;
     private final int year;
     private final String category;
     private final List<SingleRating> ratings = new ArrayList<>();
+
+    private final List<DomainEvent> events = new ArrayList<>();
 
     public Book(String title, String author, String isbn, String publisher, int year, String category) {
 
@@ -79,5 +81,20 @@ public class Book {
 
     public String description() {
         return S.$("'%s' - %s", this.title, this.author);
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+        this.registerEvent(new BookDescriptionChangedEvent(this.id, description()));
+    }
+
+    private void registerEvent(DomainEvent event) {
+        this.events.add(event);
+    }
+
+    public List<DomainEvent> getEvents() {
+        List<DomainEvent> result = new ArrayList<>(this.events);
+        events.clear();
+        return result;
     }
 }
